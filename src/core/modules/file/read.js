@@ -7,7 +7,7 @@ module.exports = path => {
   }
 
   try {
-    return fs.readFileSync(path, "utf-8");
+    return fs.readFileSync(path, "utf8");
   } catch (_) {
     return null;
   }
