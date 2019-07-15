@@ -1,6 +1,6 @@
 module.exports = {
   makeDirectory: require("./makeDirectory"),
   read: require("./read"),
-  removeDirectory: require("./lib/removeDirectory"),
+  removeDirectory: require("./removeDirectory"),
   write: require("./write")
 };
