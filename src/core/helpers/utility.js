@@ -1,6 +1,7 @@
+const path = require("path");
 const colors = require("colors/safe");
 
-module.exports = (type, name, message) => {
+function debug(type, name, message) {
   const date = new Date();
   const time = `${date.getFullYear()}/${date.getMonth()}/${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
@@ -10,4 +11,10 @@ module.exports = (type, name, message) => {
   }
 
   console.log(time, name, "-", message);
+}
+
+module.exports = {
+  absolutePath: path.resolve,
+  debug,
+  isAbsolutePath: path.isAbsolute
 };
