@@ -48,6 +48,14 @@ class Core {
           `../applications/${applicationName}`
         )
       });
+
+      this.applications[applicationName].on('close', () => {
+        delete this.applications[applicationName];
+        // if (Object.keys(this.applications).length === 0) {
+        //   process.exit(0);
+        // }
+      });
+
       require(applicationPath)(this.applications[applicationName]);
     } catch (_) {
       delete this.applications[applicationName];
