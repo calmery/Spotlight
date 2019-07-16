@@ -39,8 +39,10 @@ class Application {
   // Private
 
   _setStaticPath() {
-    const staticPath = absolutePath(this._currentDirectory, "static");
+    const commonStaticPath = absolutePath(__dirname, "../static");
+    this._express.use(express.static(commonStaticPath));
 
+    const staticPath = absolutePath(this._currentDirectory, "static");
     if (exists(staticPath)) {
       this._express.use(express.static(staticPath));
     }
