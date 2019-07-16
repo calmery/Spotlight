@@ -136,6 +136,9 @@ class Application extends EventEmitter {
 
       self._alreadyBeenActioned = true;
       self._log("createWindow(options): The window has been created");
+
+      window.loadURL(self.getUrl());
+
       return Promise.resolve(window);
     });
   }
