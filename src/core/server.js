@@ -42,6 +42,10 @@ class Server {
   getHost() {
     return `127.0.0.1:${this.getPort()}`;
   }
+
+  close() {
+    this._server.close();
+  }
 }
 
 module.exports = Server;
