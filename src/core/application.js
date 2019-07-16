@@ -1,4 +1,3 @@
-const express = require("express");
 const { debug, absolutePath } = require("./helpers/utility");
 const {
   create: createWindow,
@@ -6,6 +5,7 @@ const {
 } = require("./helpers/window");
 const { exists } = require("./helpers/file");
 const Storage = require("./storage");
+const Server = require("./server");
 
 // Helper functions
 
@@ -30,11 +30,9 @@ class Application {
     this._sharedStorage = new Storage();
     this._storage = new Storage(this._name);
 
-    // Express
+    // Server
 
-    this._express = express();
-    this._server = this._express.listen();
-    this._port = this._server.address().port;
+    this._server = new Server();
     this._alreadyBeenActioneded = false; // 既にウインドウの作成，サーバへのルーティングを行なっている場合は Port の変更をさせない
     this._setStaticPath();
 
@@ -47,51 +45,51 @@ class Application {
 
   _setStaticPath() {
     const commonStaticPath = absolutePath(__dirname, "../static");
-    this._express.use(express.static(commonStaticPath));
+    this._server.use(express.static(commonStaticPath));
 
     const staticPath = absolutePath(this._currentDirectory, "static");
     if (exists(staticPath)) {
-      this._express.use(express.static(staticPath));
+      this._server.use(express.static(staticPath));
     }
   }
 
   // Express
 
   getHost() {
-    return `127.0.0.1:${this.getPort()}`;
+    return this._server.getHost();
   }
 
   getPort() {
-    return this._port;
+    return this._server.getPort();
   }
 
   getUrl() {
-    return `http://${this.getHost()}`;
+    return this._server.getUrl();
   }
 
   use(...args) {
     this._alreadyBeenActioned = true;
-    this._express.use(...args);
+    this._server.use(...args);
   }
 
-  get(url, handler) {
+  get(...args) {
     this._alreadyBeenActioned = true;
-    this._express.get(url, handler);
+    this._server.get(...args);
   }
 
-  post(url, handler) {
+  post(...args) {
     this._alreadyBeenActioned = true;
-    this._express.get(url, handler);
+    this._server.post(...args);
   }
 
-  put(url, handler) {
+  put(...args) {
     this._alreadyBeenActioned = true;
-    this._express.get(url, handler);
+    this._server.put(...args);
   }
 
-  delete(url, handler) {
+  delete(...args) {
     this._alreadyBeenActioned = true;
-    this._express.get(url, handler);
+    this._server.delete(...args);
   }
 
   setPort(port) {
@@ -102,16 +100,12 @@ class Application {
       return;
     }
 
-    const _express = express();
-
     try {
-      const _server = _express.listen(port);
+      const server = new Server(port);
 
-      log(`Change port ${this._port} to ${port}`);
+      log(`Change port ${this.getPort()} to ${port}`);
 
-      this._express = _express;
-      this._server = _server;
-      this._port = port;
+      this._server = server;
       this._setStaticPath();
     } catch (_) {
       errorLog(`Port (${port}) is already in use`);
