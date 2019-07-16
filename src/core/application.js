@@ -1,4 +1,5 @@
 const express = require("express");
+const EventEmitter = require('events');
 const { debug, absolutePath } = require("./helpers/utility");
 const {
   create: createWindow,
@@ -20,8 +21,10 @@ function errorLog(message) {
 
 // Main
 
-class Application {
+class Application extends EventEmitter {
   constructor(options) {
+    super();
+
     this._name = options.name;
     this._currentDirectory = options.currentDirectory;
     this._alreadyClosed = false;
@@ -186,9 +189,10 @@ class Application {
   close() {
     this._alreadyClosed = true;
     this._server.close();
-    Object.keys(this._windows).forEach(function(window) {
+    Object.values(this._windows).forEach(function(window) {
       window.close();
     });
+    this.emit('close');
   }
 }
 
