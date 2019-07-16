@@ -41,7 +41,7 @@ class Core {
     }
 
     try {
-      this.applications[applicationName] = new Application();
+      this.applications[applicationName] = new Application(this);
       require(applicationPath)(this.applications[applicationName]);
     } catch (_) {
       delete this.applications[applicationName];
