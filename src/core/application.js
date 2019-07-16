@@ -1,3 +1,4 @@
+const express = require("express");
 const { debug, absolutePath } = require("./helpers/utility");
 const {
   create: createWindow,
