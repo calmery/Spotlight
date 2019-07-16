@@ -10,16 +10,6 @@ const Storage = require("./storage");
 const Server = require("./server");
 const Window = require("./window");
 
-// Helper functions
-
-function log(message) {
-  return debug("green", "Application", message);
-}
-
-function errorLog(message) {
-  return debug("red", "Application", message);
-}
-
 // Main
 
 class Application extends EventEmitter {
@@ -56,6 +46,20 @@ class Application extends EventEmitter {
     if (exists(staticPath)) {
       this._server.use(express.static(staticPath));
     }
+  }
+
+  _log(message) {
+    return debug("green", `Application:${this._name}`, message);
+  }
+
+  _errorLog(message) {
+    return debug("red", `Application:${this._name}`, message);
+  }
+
+  // Debug
+
+  log(message) {
+    debug("blue", `Application:${this._name}`, message);
   }
 
   // Express
@@ -99,7 +103,7 @@ class Application extends EventEmitter {
 
   setPort(port) {
     if (this._alreadyBeenActioned) {
-      errorLog(
+      this._errorLog(
         "Port configuration must be done before configuring the HTTP request method"
       );
       return;
@@ -108,12 +112,12 @@ class Application extends EventEmitter {
     try {
       const server = new Server(port);
 
-      log(`Change port ${this.getPort()} to ${port}`);
+      this._log(`Change port ${this.getPort()} to ${port}`);
 
       this._server = server;
       this._setStaticPath();
     } catch (_) {
-      errorLog(`Port (${port}) is already in use`);
+      this._errorLog(`Port (${port}) is already in use`);
     }
   }
 
@@ -126,23 +130,23 @@ class Application extends EventEmitter {
       // ウインドウの作成中にアプリケーションが閉じられた場合にウインドウのみ表示されてしまうので対策する
       if (self._alreadyClosed) {
         window.close();
-        errorLog("The application is already closed");
+        this._errorLog("The application is already closed");
         return Promise.reject();
       }
 
       self._alreadyBeenActioned = true;
-      log("createWindow(options): The window has been created");
+      this._log("createWindow(options): The window has been created");
       return Promise.resolve(window);
     });
   }
 
   destoryWindow(window) {
     if (this._window.destoryWindow(window)) {
-      log("destoryWindow(window): The window has been destoryed");
+      this._log("destoryWindow(window): The window has been destoryed");
       return;
     }
 
-    errorLog("destoryWindow(window): The window is not found");
+    this._errorLog("destoryWindow(window): The window is not found");
   }
 
   // Storage
@@ -186,7 +190,7 @@ class Application extends EventEmitter {
     this._server.close();
     this._window.destoryAll();
     this.emit("close");
-    log("Application has been closed");
+    this._log("Application has been closed");
   }
 }
 
