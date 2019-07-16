@@ -41,7 +41,10 @@ class Core {
     }
 
     try {
-      this.applications[applicationName] = new Application(this);
+      this.applications[applicationName] = new Application({
+        name: applicationName,
+        currentDirectory: absolutePath(__dirname, `../applications/${applicationName}`)
+      });
       require(applicationPath)(this.applications[applicationName]);
     } catch (_) {
       delete this.applications[applicationName];
