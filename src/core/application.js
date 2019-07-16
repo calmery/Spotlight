@@ -5,6 +5,7 @@ const {
   destory: destoryWindow
 } = require("./helpers/window");
 const { exists } = require("./helpers/file");
+const Storage = require("./storage");
 
 // Helper functions
 
@@ -22,6 +23,12 @@ class Application {
   constructor(options) {
     this._name = options.name;
     this._currentDirectory = options.currentDirectory;
+    this._alreadyClosed = false;
+
+    // Storage
+
+    this._sharedStorage = new Storage();
+    this._storage = new Storage(this._name);
 
     // Express
 
@@ -118,6 +125,13 @@ class Application {
 
     // Reference: https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises
     return createWindow(options).then(function(window) {
+      // ウインドウの作成中にアプリケーションが閉じられた場合にウインドウのみ表示されてしまうので対策する
+      if (self._alreadyClosed) {
+        window.close();
+        errorLog("The application is already closed");
+        return Promise.reject();
+      }
+
       self._windows[window.id] = window;
       self._alreadyBeenActioned = true;
       log("createWindow(options): The window has been created");
@@ -138,9 +152,49 @@ class Application {
     log("destoryWindow(window): The window has been destoryed");
   }
 
+  // Storage
+
+  saveSharedAppData(filePath, body) {
+    return this._sharedStorage.saveAppData(filePath, body);
+  }
+
+  loadSharedAppData(filePath) {
+    return this._sharedStorage.loadAppData(filePath);
+  }
+
+  saveSharedDocuments(filePath, body) {
+    return this._sharedStorage.saveDocuments(filePath, body);
+  }
+
+  loadSharedDocuments(filePath) {
+    return this._sharedStorage.loadDocuments(filePath);
+  }
+
+  saveAppData(filePath, body) {
+    return this._storage.saveAppData(filePath, body);
+  }
+
+  loadAppData(filePath) {
+    return this._storage.loadAppData(filePath);
+  }
+
+  saveDocuments(filePath, body) {
+    return this._storage.saveDocuments(filePath, body);
+  }
+
+  loadDocuments(filePath) {
+    return this._storage.loadDocuments(filePath);
+  }
+
   // Manage
 
-  close() {}
+  close() {
+    this._alreadyClosed = true;
+    this._server.close();
+    Object.keys(this._windows).forEach(function(window) {
+      window.close();
+    });
+  }
 }
 
 module.exports = Application;

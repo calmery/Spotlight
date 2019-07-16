@@ -11,22 +11,20 @@ const STORAGE_PREFIX = "jp.ac.sojo-u.cis.Spotlight";
 const STORAGE_PATH_APP_DATA = electron.app.getPath("appData");
 const STORAGE_PATH_DOCUMENTS = electron.app.getPath("documents");
 
-// Helper Functions
-
-const generateRandomPrefix = () =>
-  Math.random()
-    .toString(36)
-    .slice(-8);
-
 // Main
 
 class Storage {
   constructor(prefix) {
-    this.prefix = prefix || generateRandomPrefix();
+    this.prefix = prefix;
   }
 
   _getPath(directoryPath, filePath) {
-    return absolutePath(directoryPath, STORAGE_PREFIX, this.prefix, filePath);
+    return absolutePath(
+      directoryPath,
+      STORAGE_PREFIX,
+      this.prefix || "",
+      filePath
+    );
   }
 
   _save(directoryPath, filePath, body) {
