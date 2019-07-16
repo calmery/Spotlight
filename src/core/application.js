@@ -121,6 +121,7 @@ class Application {
       self._windows[window.id] = window;
       self._alreadyBeenActioned = true;
       log("createWindow(options): The window has been created");
+      window.setMenu(null);
       return Promise.resolve(window);
     });
   }
