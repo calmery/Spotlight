@@ -2,7 +2,7 @@ const electron = require("electron");
 const {
   file: { read, write },
   utility: { absolutePath }
-} = require("./modules");
+} = require("./helpers");
 
 // Constants
 // Reference: https://github.com/electron/electron/blob/master/docs/api/app.md#appgetpathname
