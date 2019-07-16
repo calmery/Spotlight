@@ -63,7 +63,6 @@ async function main(application) {
   const window = await application.createWindow();
   window.setMaximumSize(800, 600);
   window.setMinimumSize(800, 600);
-  window.loadURL(application.getUrl());
 }
 
 module.exports = main;
