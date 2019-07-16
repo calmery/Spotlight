@@ -49,8 +49,9 @@ class Core {
         )
       });
 
+      const self = this;
       this.applications[applicationName].on("close", function() {
-        delete this.applications[applicationName];
+        delete self.applications[applicationName];
         // if (Object.keys(this.applications).length === 0) {
         //   process.exit(0);
         // }

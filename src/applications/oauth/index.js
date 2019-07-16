@@ -9,6 +9,7 @@ async function main(application) {
   if (application.loadSharedAppData("authentication.json") !== null) {
     // electron を使用してひとつもウインドウが作られることなくアプリケーションを終了しようとした場合は electron が起動したままになる
     // 要は window-all-closed が呼ばれないのでアプリケーション自体が終了しない
+    application.log("Already authorized");
     application.close();
     return;
   }
@@ -44,6 +45,7 @@ async function main(application) {
           "authentication.json",
           JSON.stringify(user)
         );
+        application.log("Authorized");
         application.close();
         return done(null, user);
       }
