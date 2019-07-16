@@ -130,12 +130,12 @@ class Application extends EventEmitter {
       // ウインドウの作成中にアプリケーションが閉じられた場合にウインドウのみ表示されてしまうので対策する
       if (self._alreadyClosed) {
         window.close();
-        this._errorLog("The application is already closed");
+        self._errorLog("The application is already closed");
         return Promise.reject();
       }
 
       self._alreadyBeenActioned = true;
-      this._log("createWindow(options): The window has been created");
+      self._log("createWindow(options): The window has been created");
       return Promise.resolve(window);
     });
   }
