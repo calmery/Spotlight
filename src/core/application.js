@@ -1,5 +1,5 @@
 const express = require("express");
-const EventEmitter = require('events');
+const EventEmitter = require("events");
 const { debug, absolutePath } = require("./helpers/utility");
 const {
   create: createWindow,
@@ -8,6 +8,7 @@ const {
 const { exists } = require("./helpers/file");
 const Storage = require("./storage");
 const Server = require("./server");
+const Window = require("./window");
 
 // Helper functions
 
@@ -40,9 +41,9 @@ class Application extends EventEmitter {
     this._alreadyBeenActioneded = false; // 既にウインドウの作成，サーバへのルーティングを行なっている場合は Port の変更をさせない
     this._setStaticPath();
 
-    // Electron
+    // Window
 
-    this._windows = {};
+    this._window = new Window();
   }
 
   // Private
@@ -121,8 +122,7 @@ class Application extends EventEmitter {
   createWindow(options) {
     const self = this;
 
-    // Reference: https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises
-    return createWindow(options).then(function(window) {
+    return this._window.createWindow(options).then(function(window) {
       // ウインドウの作成中にアプリケーションが閉じられた場合にウインドウのみ表示されてしまうので対策する
       if (self._alreadyClosed) {
         window.close();
@@ -130,24 +130,19 @@ class Application extends EventEmitter {
         return Promise.reject();
       }
 
-      self._windows[window.id] = window;
       self._alreadyBeenActioned = true;
       log("createWindow(options): The window has been created");
-      window.setMenu(null);
       return Promise.resolve(window);
     });
   }
 
   destoryWindow(window) {
-    if (this._windows[window.id] === undefined) {
-      errorLog("destoryWindow(window): The window is not found");
+    if (this._window.destoryWindow(window)) {
+      log("destoryWindow(window): The window has been destoryed");
       return;
     }
 
-    destoryWindow(window);
-    delete this._windows[window.id];
-
-    log("destoryWindow(window): The window has been destoryed");
+    errorLog("destoryWindow(window): The window is not found");
   }
 
   // Storage
@@ -189,10 +184,9 @@ class Application extends EventEmitter {
   close() {
     this._alreadyClosed = true;
     this._server.close();
-    Object.values(this._windows).forEach(function(window) {
-      window.close();
-    });
-    this.emit('close');
+    this._window.destoryAll();
+    this.emit("close");
+    log("Application has been closed");
   }
 }
 

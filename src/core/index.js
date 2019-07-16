@@ -49,20 +49,20 @@ class Core {
         )
       });
 
-      this.applications[applicationName].on('close', () => {
+      this.applications[applicationName].on("close", function() {
         delete this.applications[applicationName];
         // if (Object.keys(this.applications).length === 0) {
         //   process.exit(0);
         // }
       });
 
+      log(method, "Application has been opened");
+
       require(applicationPath)(this.applications[applicationName]);
     } catch (_) {
       delete this.applications[applicationName];
-      return errorLog(method, "Application structure is incorrect");
+      errorLog(method, "Application structure is incorrect");
     }
-
-    return log(method, "Application has been opened");
   }
 
   closeApplication(applicationName) {
