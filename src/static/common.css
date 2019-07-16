@@ -230,7 +230,6 @@ body#_application:after {
 }
 
 ._bg_primary {
-  -webkit-transition: 0.25s linear;
   background: #3bafda !important;
   color: rgba(255, 255, 255, 1);
 }
@@ -240,7 +239,6 @@ body#_application:after {
 }
 
 ._bg_success {
-  -webkit-transition: 0.25s linear;
   background: #8cc152 !important;
   color: rgba(255, 255, 255, 1);
 }
@@ -250,7 +248,6 @@ body#_application:after {
 }
 
 ._bg_info {
-  -webkit-transition: 0.25s linear;
   background: #37bc9b !important;
   color: rgba(255, 255, 255, 1);
 }
@@ -260,7 +257,6 @@ body#_application:after {
 }
 
 ._bg_warning {
-  -webkit-transition: 0.25s linear;
   background: #f6bb42 !important;
   color: rgba(255, 255, 255, 1);
 }
@@ -270,7 +266,6 @@ body#_application:after {
 }
 
 ._bg_danger {
-  -webkit-transition: 0.25s linear;
   background: #da4453 !important;
   color: rgba(255, 255, 255, 1);
 }
