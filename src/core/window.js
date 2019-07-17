@@ -27,6 +27,10 @@ class Window {
   }
 
   destoryWindow(window) {
+    if (window.isDestroyed()) {
+      return true;
+    }
+
     const id = window.id;
 
     if (!this._windows.hasOwnProperty(id)) {
