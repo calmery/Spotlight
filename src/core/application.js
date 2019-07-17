@@ -1,11 +1,21 @@
 const path = require("path");
-const express = require("express");
 const EventEmitter = require("events");
-const { debug } = require("./helpers/utility");
-const { exists } = require("./helpers/file");
+const express = require("express");
+const utility = require("./helpers/utility");
+const file = require("./helpers/file");
 const Storage = require("./storage");
 const Server = require("./server");
 const Window = require("./window");
+
+// Helper Functions
+
+function log(applicationName, message) {
+  utility.log("green", `Application:${applicationName}`, message);
+}
+
+function errorLog(applicationName, message) {
+  utility.log("red", `Application:${applicationName}`, message);
+}
 
 // Main
 
@@ -26,7 +36,7 @@ class Application extends EventEmitter {
     // Server
 
     this._server = new Server();
-    this._alreadyBeenActioneded = false; // 既にウインドウの作成，サーバへのルーティングを行なっている場合は Port の変更をさせない
+    this._alreadyBeenActioneded = false; // 既にウインドウの作成，サーバへのルーティングを行なっている場合は Port の変更を許可しない
     this._setStaticPath();
 
     // Window
@@ -37,21 +47,24 @@ class Application extends EventEmitter {
   // Private
 
   _setStaticPath() {
+    // 共通の静的ファイルがあれば使用する
     const commonStaticPath = path.resolve(__dirname, "../static");
     this._server.use(express.static(commonStaticPath));
 
+    // アプリケーション内に static フォルダがあれば使用する
     const staticPath = path.resolve(this._currentDirectory, "static");
-    if (exists(staticPath)) {
+    if (file.exists(staticPath)) {
       this._server.use(express.static(staticPath));
     }
   }
 
-  _log(message) {
-    return debug("green", `Application:${this._name}`, message);
-  }
+  // Control
 
-  _errorLog(message) {
-    return debug("red", `Application:${this._name}`, message);
+  close() {
+    this._server.close();
+    this._window.destoryAll();
+    this._alreadyClosed = true;
+    this.emit("close");
   }
 
   // Applications
@@ -67,7 +80,7 @@ class Application extends EventEmitter {
   // Debug
 
   log(message) {
-    debug("blue", `Application:${this._name}`, message);
+    utility.log("blue", `Application:${this._name}`, message);
   }
 
   // Express
@@ -111,7 +124,8 @@ class Application extends EventEmitter {
 
   setPort(port) {
     if (this._alreadyBeenActioned) {
-      this._errorLog(
+      errorLog(
+        this._name,
         "Port configuration must be done before configuring the HTTP request method"
       );
       return;
@@ -120,44 +134,43 @@ class Application extends EventEmitter {
     try {
       const server = new Server(port);
 
-      this._log(`Change port ${this.getPort()} to ${port}`);
+      log(this._name, `Change port ${this.getPort()} to ${port}`);
 
       this._server = server;
       this._setStaticPath();
     } catch (_) {
-      this._errorLog(`Port (${port}) is already in use`);
+      errorLog(this._name, `Port (${port}) is already in use`);
     }
   }
 
   // Electron
 
   createWindow(options) {
-    const window = this._window.createWindow(options);
+    this._alreadyBeenActioned = true;
 
     if (this._alreadyClosed) {
-      window.close();
-      this._errorLog("The application is already closed");
+      errorLog(this._name, "The application is already closed");
       return;
     }
 
-    this._alreadyBeenActioned = true;
-    this._log("createWindow(options): The window has been created");
-
+    const window = this._window.createWindow(options);
     window.loadURL(this.getUrl());
+
+    log(this._name, "The window has been created");
 
     return window;
   }
 
   destoryWindow(window) {
     if (this._window.destoryWindow(window)) {
-      this._log("destoryWindow(window): The window has been destoryed");
+      log(this._name, "The window has been destoryed");
       return;
     }
 
-    this._errorLog("destoryWindow(window): The window is not found");
+    errorLog(this._name, "The window is not found");
   }
 
-  // Storage
+  // Storage (Shared)
 
   saveSharedAppData(filePath, body) {
     return this._sharedStorage.saveAppData(filePath, body);
@@ -183,6 +196,8 @@ class Application extends EventEmitter {
     return this._sharedStorage.removeDocuments(filePath);
   }
 
+  // Storage
+
   saveAppData(filePath, body) {
     return this._storage.saveAppData(filePath, body);
   }
@@ -205,16 +220,6 @@ class Application extends EventEmitter {
 
   removeDocuments(filePath) {
     return this._storage.removeDocuments(filePath);
-  }
-
-  // Manage
-
-  close() {
-    this._alreadyClosed = true;
-    this._server.close();
-    this._window.destoryAll();
-    this.emit("close");
-    this._log("Application has been closed");
   }
 }
 

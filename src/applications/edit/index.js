@@ -36,8 +36,11 @@ function main(application) {
   });
 
   application.get("/all", function(request, response) {
-    response.status(200).json(searchJson).end();
-  })
+    response
+      .status(200)
+      .json(searchJson)
+      .end();
+  });
 
   application.get("/load", function(request, response) {
     const name = request.query.name;
@@ -50,7 +53,7 @@ function main(application) {
     }
 
     // TODO: バリデーションしてない
-    const tweets = application.loadSharedDocuments(`${name}.json`)
+    const tweets = application.loadSharedDocuments(`${name}.json`);
 
     // ファイルが見つからない
     if (tweets === null) {
@@ -59,13 +62,19 @@ function main(application) {
       // search.json に含まれている場合，データにズレが発生しているので search.json を更新する
       if (searchJson.hasOwnProperty(name)) {
         delete searchJson[name];
-        application.saveSharedDocuments("search.json", JSON.stringify(searchJson));
+        application.saveSharedDocuments(
+          "search.json",
+          JSON.stringify(searchJson)
+        );
       }
 
       return;
     }
 
-    response.status(200).json(JSON.parse(tweets)).end();
+    response
+      .status(200)
+      .json(JSON.parse(tweets))
+      .end();
   });
 
   const window = application.createWindow();

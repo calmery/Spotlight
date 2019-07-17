@@ -28,10 +28,10 @@ function load(name) {
     return;
   }
 
-  const menus = document.querySelectorAll('.file');
-  
-  for(let i=0; i<menus.length; i++) {
-    console.log(menus)
+  const menus = document.querySelectorAll(".file");
+
+  for (let i = 0; i < menus.length; i++) {
+    console.log(menus);
     menus[i].className = "_menu file";
   }
 
@@ -58,7 +58,7 @@ function renderFiles(files) {
   element.innerHTML = "";
 
   Object.entries(files).forEach(function(data) {
-    const fileName = data[0] + '.json';
+    const fileName = data[0] + ".json";
     const query = decodeURIComponent(data[1]);
 
     element.innerHTML += `
@@ -70,17 +70,17 @@ function renderFiles(files) {
           </div>
         </div>
       </nav>
-    `
-  })
+    `;
+  });
 }
 
 function updateFiles() {
   getJson("/all")
-    .catch(function () {
-      alert("ファイル一覧の取得に失敗しました")
+    .catch(function() {
+      alert("ファイル一覧の取得に失敗しました");
     })
     .then(response => response.json())
-    .then(renderFiles)
+    .then(renderFiles);
 }
 
 updateFiles();
