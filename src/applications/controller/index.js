@@ -1,4 +1,4 @@
-async function main(application) {
+function main(application) {
   if (application.loadSharedAppData("authentication.json") === null) {
     application.openApplication("oauth");
     application.close();
@@ -10,7 +10,7 @@ async function main(application) {
     response.status(200).end();
   });
 
-  const window = await application.createWindow({
+  const window = application.createWindow({
     width: 200,
     height: 600
   });

@@ -1,5 +1,6 @@
 const { absolutePath, debug } = require("./helpers/utility");
 const { exists } = require("./helpers/file");
+const { wait } = require("./helpers/window");
 const Application = require("./application");
 
 // Helper Functions
@@ -25,7 +26,9 @@ class Core {
     this.applications = {};
   }
 
-  openApplication(applicationName) {
+  async openApplication(applicationName) {
+    await wait();
+
     const method = `openApplication(${
       applicationName ? '"' + applicationName + '"' : ""
     })`;
