@@ -20,6 +20,16 @@ class Core {
   constructor() {
     // 起動済みのアプリケーションの情報を保持する
     this.applications = {};
+
+    // プロセスが終了するときに close イベントを送出する
+    const self = this;
+    process.on('exit', function() {
+      const applicationNames = Object.keys(self.applications);
+
+      for(let i=0; i<applicationNames.length; i++) {
+        self.closeApplication(applicationNames[i]);
+      }
+    });
   }
 
   async openApplication(applicationName) {
@@ -45,6 +55,10 @@ class Core {
     // アプリケーションが起動していないことを確認する
     if (this.applications.hasOwnProperty(applicationName)) {
       errorLog(`Application (${applicationName}) is already opened`);
+
+      // アプリケーションが存在する場合はアプリケーションに向けて open リクエストを送信する
+      this.applications[applicationName].emit("open");
+
       return;
     }
 
@@ -62,13 +76,15 @@ class Core {
       // アプリケーションから close が呼ばれたときに終了の処理を行う
       this.applications[applicationName].on("close", function() {
         delete self.applications[applicationName];
-        log(`Application (${applicationName}) has been closed`);
       });
 
       log(`Application (${applicationName}) has been opened`);
 
       // アプリケーション側から module.exports された関数を呼び出す
       require(applicationPath)(this.applications[applicationName]);
+
+      // open イベントを送出する
+      this.applications[applicationName].emit("open");
     } catch (error) {
       delete this.applications[applicationName];
       errorLog(`Application (${applicationName}) structure is incorrect\n\tError: ${error.message}`);
@@ -99,11 +115,11 @@ class Core {
       return;
     }
 
+    log(`A request has been sent to terminate application (${applicationName})`)
+
     // Application クラスの close を呼び出した上で，Core の管理，this._applications から削除する
     this.applications[applicationName].close();
     delete this.applications[applicationName];
-
-    log(`Application (${applicationName}) has been closed`);
   }
 }
 
