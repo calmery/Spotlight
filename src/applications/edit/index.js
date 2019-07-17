@@ -86,7 +86,7 @@ function main(application) {
       window.setMaximumSize(800, 600);
       window.setMinimumSize(800, 600);
     }
-  })
+  });
 }
 
 module.exports = main;

@@ -23,10 +23,10 @@ class Core {
 
     // プロセスが終了するときに close イベントを送出する
     const self = this;
-    process.on('exit', function() {
+    process.on("exit", function() {
       const applicationNames = Object.keys(self.applications);
 
-      for(let i=0; i<applicationNames.length; i++) {
+      for (let i = 0; i < applicationNames.length; i++) {
         self.closeApplication(applicationNames[i]);
       }
     });
@@ -87,7 +87,11 @@ class Core {
       this.applications[applicationName].emit("open");
     } catch (error) {
       delete this.applications[applicationName];
-      errorLog(`Application (${applicationName}) structure is incorrect\n\tError: ${error.message}`);
+      errorLog(
+        `Application (${applicationName}) structure is incorrect\n\tError: ${
+          error.message
+        }`
+      );
     }
   }
 
@@ -115,7 +119,9 @@ class Core {
       return;
     }
 
-    log(`A request has been sent to terminate application (${applicationName})`)
+    log(
+      `A request has been sent to terminate application (${applicationName})`
+    );
 
     // Application クラスの close を呼び出した上で，Core の管理，this._applications から削除する
     this.applications[applicationName].close();
