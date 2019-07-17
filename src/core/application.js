@@ -63,7 +63,7 @@ class Application extends EventEmitter {
     const isFocused = this._window.isFocused();
     if (isFocused !== this._isFocused) {
       this._isFocused = isFocused;
-      this.emit(isFocused ? 'focus' : 'blur');
+      this.emit(isFocused ? "focus" : "blur");
     }
   }
 
@@ -169,8 +169,8 @@ class Application extends EventEmitter {
 
     const window = this._window.createWindow(options);
     window.loadURL(this.getUrl());
-    window.on('focus', this._handleFocus.bind(this))
-    window.on('blur', this._handleFocus.bind(this))
+    window.on("focus", this._handleFocus.bind(this));
+    window.on("blur", this._handleFocus.bind(this));
 
     log(this._name, "The window has been created");
 

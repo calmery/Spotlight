@@ -19,9 +19,9 @@ class Window {
 
     // 「x」ボタンでウインドウが閉じられたとき，this._windows から削除する
     const self = this;
-    window.on('close', function() {
+    window.on("close", function() {
       delete self._windows[window.id];
-    })
+    });
 
     return window;
   }
@@ -54,9 +54,9 @@ class Window {
   isFocused() {
     const windows = Object.values(this._windows);
 
-    return windows.every(function (window) {
+    return windows.every(function(window) {
       return window.isFocused();
-    })
+    });
   }
 }
 
