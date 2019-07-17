@@ -1,6 +1,6 @@
 const path = require("path");
 const electron = require("electron");
-const { readFile, writeFile, removeFile } = require("./helpers/file");
+const file = require("./helpers/file");
 
 // Constants
 // Reference: https://github.com/electron/electron/blob/master/docs/api/app.md#appgetpathname
@@ -26,15 +26,15 @@ class Storage {
   }
 
   _save(directoryPath, filePath, body) {
-    return writeFile(this._getPath(directoryPath, filePath), body);
+    return file.writeFile(this._getPath(directoryPath, filePath), body);
   }
 
   _load(directoryPath, filePath) {
-    return readFile(this._getPath(directoryPath, filePath));
+    return file.readFile(this._getPath(directoryPath, filePath));
   }
 
   _remove(directoryPath, filePath) {
-    return removeFile(this._getPath(directoryPath, filePath));
+    return file.removeFile(this._getPath(directoryPath, filePath));
   }
 
   // AppData

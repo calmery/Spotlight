@@ -65,7 +65,7 @@ function removeDirectoryHelper(directoryPath) {
     // 指定されたディレクトリ内に存在するファイルを取得する
     files = fs.readdirSync(directoryPath);
 
-    for(let i=0; i<files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
       const fileName = files[i];
       const filePath = directoryPath + "/" + fileName;
 

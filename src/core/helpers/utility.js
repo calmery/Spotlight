@@ -1,6 +1,6 @@
 const colors = require("colors/safe");
 
-function debug(type, name, message) {
+function log(type, name, message) {
   const date = new Date();
   const time = `${date.getFullYear()}/${date.getMonth()}/${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
@@ -13,5 +13,5 @@ function debug(type, name, message) {
 }
 
 module.exports = {
-  debug
+  log
 };

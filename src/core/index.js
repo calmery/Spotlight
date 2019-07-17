@@ -1,53 +1,48 @@
 const path = require("path");
-const { debug } = require("./helpers/utility");
-const { exists } = require("./helpers/file");
-const { wait } = require("./helpers/window");
+const utility = require("./helpers/utility");
+const file = require("./helpers/file");
+const window = require("./helpers/window");
 const Application = require("./application");
 
 // Helper Functions
 
-const LOG_NAME = "Core";
+function log(message) {
+  utility.log("green", "Core", message);
+}
 
-const log = (method, message) => {
-  debug("green", LOG_NAME, `${method}: ${message}`);
-};
-
-const errorLog = (method, message) => {
-  debug("red", LOG_NAME, `${method}: ${message}`);
-};
-
-const getApplicationPath = applicationName => {
-  return path.resolve(__dirname, "../applications/", applicationName);
-};
+function errorLog(message) {
+  utility.log("red", "Core", message);
+}
 
 // Main
 
 class Core {
   constructor() {
+    // 起動済みのアプリケーションの情報を保持する
     this.applications = {};
   }
 
   async openApplication(applicationName) {
-    await wait();
-
-    const method = `openApplication(${
-      applicationName ? '"' + applicationName + '"' : ""
-    })`;
+    await window.wait();
 
     if (applicationName === undefined) {
-      errorLog(method, "Application name invalid");
+      errorLog("Application name invalid");
       return;
     }
 
-    const applicationPath = getApplicationPath(applicationName);
+    const applicationPath = path.resolve(
+      __dirname,
+      "../applications/",
+      applicationName
+    );
 
-    if (!exists(applicationPath)) {
-      errorLog(method, "Application is not found");
+    if (!file.exists(applicationPath)) {
+      errorLog(`Application (${applicationName}) is not found`);
       return;
     }
 
     if (this.applications[applicationName] !== undefined) {
-      errorLog(method, "Application is already opened");
+      errorLog(`Application (${applicationName}) is already opened`);
       return;
     }
 
@@ -61,45 +56,50 @@ class Core {
       });
 
       const self = this;
+
+      // アプリケーションから close が呼ばれたときに終了の処理を行う
       this.applications[applicationName].on("close", function() {
         delete self.applications[applicationName];
-        // if (Object.keys(this.applications).length === 0) {
-        //   process.exit(0);
-        // }
+        log(`Application (${applicationName}) has been closed`);
       });
 
-      log(method, "Application has been opened");
+      log(`Application (${applicationName}) has been opened`);
 
       require(applicationPath)(this.applications[applicationName]);
     } catch (_) {
       delete this.applications[applicationName];
-      errorLog(method, "Application structure is incorrect");
+      errorLog(`Application (${applicationName}) structure is incorrect`);
     }
   }
 
   closeApplication(applicationName) {
-    const method = `closeApplication(${
-      applicationName ? '"' + applicationName + '"' : ""
-    })`;
-
     if (applicationName === undefined) {
-      return errorLog(method, "Application name invalid");
+      errorLog("Application name invalid");
+      return;
     }
 
-    const applicationPath = getApplicationPath(applicationName);
+    const applicationPath = path.resolve(
+      __dirname,
+      "../applications/",
+      applicationName
+    );
 
-    if (!exists(applicationPath)) {
-      return errorLog(method, "Application is not found");
+    // アプリケーションの実行ファイルが見つからない
+    if (!file.exists(applicationPath)) {
+      errorLog(`Application (${applicationName}) is not found`);
+      return;
     }
 
+    // アプリケーションが起動していない
     if (!this.applications.hasOwnProperty(applicationName)) {
-      return errorLog(method, "Application has not been opened");
+      errorLog(`Application (${applicationName}) has not been opened`);
+      return;
     }
 
     this.applications[applicationName].close();
     delete this.applications[applicationName];
 
-    return log(method, "Application has been closed");
+    log(`Application (${applicationName}) has been closed`);
   }
 }
 

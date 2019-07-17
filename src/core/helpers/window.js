@@ -19,16 +19,16 @@ function destory(main) {
 
 // electron でウインドウが作成できるようになるまで待機する
 function wait() {
-  return new Promise(function (resolve) {
+  return new Promise(function(resolve) {
     if (app.isReady()) {
       resolve();
       return;
     }
 
     app.on("ready", function() {
-      resolve()
+      resolve();
     });
-  })
+  });
 }
 
 module.exports = {

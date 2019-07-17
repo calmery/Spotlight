@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 class Server {
   constructor(port) {
     this._express = express();
-    this._express.use(bodyParser.json({ limit: "50mb" }));
+    this._express.use(bodyParser.json({ limit: "100mb" }));
     this._server = this._express.listen(port);
     this._port = this._server.address().port;
   }
@@ -33,16 +33,16 @@ class Server {
     return this._express.delete(...args);
   }
 
+  getHost() {
+    return `127.0.0.1:${this.getPort()}`;
+  }
+
   getPort() {
     return this._port;
   }
 
   getUrl() {
     return `http://${this.getHost()}`;
-  }
-
-  getHost() {
-    return `127.0.0.1:${this.getPort()}`;
   }
 
   close() {
