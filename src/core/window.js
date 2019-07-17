@@ -9,11 +9,20 @@ class Window {
     this._windows = {};
   }
 
+  // Private
+
   createWindow(options) {
     // Reference: https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises
     const window = createWindow(options);
     this._windows[window.id] = window;
     window.setMenu(null);
+
+    // 「x」ボタンでウインドウが閉じられたとき，this._windows から削除する
+    const self = this;
+    window.on('close', function() {
+      delete self._windows[window.id];
+    })
+
     return window;
   }
 
@@ -36,6 +45,18 @@ class Window {
     for (let i = 0; i < windows.length; i++) {
       this.destoryWindow(windows[i]);
     }
+  }
+
+  getCount() {
+    return Object.keys(this._windows).length;
+  }
+
+  isFocused() {
+    const windows = Object.values(this._windows);
+
+    return windows.every(function (window) {
+      return window.isFocused();
+    })
   }
 }
 

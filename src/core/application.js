@@ -27,6 +27,7 @@ class Application extends EventEmitter {
     this._name = options.name;
     this._currentDirectory = options.currentDirectory;
     this._alreadyClosed = false;
+    this._isFocused = true; // 起動時点ではフォーカスされている
 
     // Storage
 
@@ -55,6 +56,20 @@ class Application extends EventEmitter {
     const staticPath = path.resolve(this._currentDirectory, "static");
     if (file.exists(staticPath)) {
       this._server.use(express.static(staticPath));
+    }
+  }
+
+  _handleFocus() {
+    const isFocused = this._window.isFocused();
+    if (isFocused !== this._isFocused) {
+      this._isFocused = isFocused;
+      this.emit(isFocused ? 'focus' : 'blur');
+    }
+  }
+
+  _handleCloseWindow() {
+    if (this._window.getCount() === 0) {
+      this.close();
     }
   }
 
@@ -155,6 +170,9 @@ class Application extends EventEmitter {
 
     const window = this._window.createWindow(options);
     window.loadURL(this.getUrl());
+    window.on('focus', this._handleFocus.bind(this))
+    window.on('blur', this._handleFocus.bind(this))
+    window.on('close', this._handleCloseWindow.bind(this))
 
     log(this._name, "The window has been created");
 
