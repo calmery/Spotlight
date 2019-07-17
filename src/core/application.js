@@ -84,7 +84,9 @@ class Application extends EventEmitter {
   // Applications
 
   openApplication(applicationName) {
-    this._core.openApplication(applicationName);
+    // core の openApplication は async function なので場合によって待機が必要な場合がある
+    // 例として，oauth での認証後に controller を開く場合，controller の起動を待って，oauth を終了する必要がある
+    return this._core.openApplication(applicationName);
   }
 
   closeApplication(applicationName) {
