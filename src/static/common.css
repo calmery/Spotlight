@@ -624,6 +624,10 @@ body#_application:after {
   margin-top: 15px;
 }
 
+._icon_font {
+  font-family: Condense;
+}
+
 ._main ._content._tweet ._text ._status ._reaction ._retweet ._icon_font {
   color: #8cc152;
 }
@@ -706,4 +710,35 @@ body#_application:after {
   animation-timing-function: ease;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
+}
+
+._tweet {
+  -webkit-transition: 10s liner;
+}
+
+._safe {
+  border-left-color: #8cc152 !important;
+}
+
+._safe ._profile {
+  margin-bottom: 0 !important;
+}
+
+._safe ._text,
+._safe ._tag_group {
+  display: none;
+}
+
+._sidebar {
+  top: 0;
+  left: 0;
+  height: 100%;
+  position: fixed;
+  border-right: 1px solid rgba(0, 139, 198, 1);
+}
+
+._main {
+  top: 0;
+  right: 0;
+  position: absolute;
 }
