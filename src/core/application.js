@@ -67,12 +67,6 @@ class Application extends EventEmitter {
     }
   }
 
-  _handleCloseWindow() {
-    if (this._window.getCount() === 0) {
-      this.close();
-    }
-  }
-
   // Control
 
   close() {
@@ -172,7 +166,6 @@ class Application extends EventEmitter {
     window.loadURL(this.getUrl());
     window.on('focus', this._handleFocus.bind(this))
     window.on('blur', this._handleFocus.bind(this))
-    window.on('close', this._handleCloseWindow.bind(this))
 
     log(this._name, "The window has been created");
 
