@@ -77,9 +77,16 @@ function main(application) {
       .end();
   });
 
-  const window = application.createWindow();
-  window.setMaximumSize(800, 600);
-  window.setMinimumSize(800, 600);
+  application.on("open", () => {
+    if (application.getWindowCount() === 0) {
+      const window = application.createWindow({
+        width: 800,
+        height: 600
+      });
+      window.setMaximumSize(800, 600);
+      window.setMinimumSize(800, 600);
+    }
+  })
 }
 
 module.exports = main;

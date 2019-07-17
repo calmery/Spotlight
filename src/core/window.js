@@ -47,6 +47,10 @@ class Window {
     }
   }
 
+  getCount() {
+    return Object.keys(this._windows).length;
+  }
+
   isFocused() {
     const windows = Object.values(this._windows);
 

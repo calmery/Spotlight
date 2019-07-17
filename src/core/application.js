@@ -74,6 +74,7 @@ class Application extends EventEmitter {
     this._window.destoryAll();
     this._alreadyClosed = true;
     this.emit("close");
+    log(this._name, "Application has been closed");
   }
 
   // Applications
@@ -153,6 +154,10 @@ class Application extends EventEmitter {
   }
 
   // Electron
+
+  getWindowCount() {
+    return this._window.getCount();
+  }
 
   createWindow(options) {
     this._alreadyBeenActioned = true;
