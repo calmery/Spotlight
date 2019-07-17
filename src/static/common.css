@@ -364,7 +364,6 @@ body#_application:after {
 
 ._sidebar ._navigator ._menu:hover {
   background: rgba(0, 139, 198, 1);
-  -webkit-transition: 0.25s linear;
 }
 
 ._sidebar ._navigator ._menu:after {
