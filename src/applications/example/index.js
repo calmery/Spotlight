@@ -146,13 +146,13 @@ function main(application) {
     // 加工して送り返す
     response.json({
       messageFromServer: "Recieved: " + message
-    })
-  })
+    });
+  });
 
   const main = application.createWindow();
   // src/applications/example/static 内にある example.html を開きます
   main.loadURL(application.getUrl() + "/example.html");
-  main.openDevTools()
+  main.openDevTools();
 }
 
 // module.exports に代入した関数がアプリケーションの起動時に呼び出されます
