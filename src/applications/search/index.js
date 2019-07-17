@@ -6,7 +6,7 @@ function md5(string) {
   return md5.update(JSON.stringify(string), "binary").digest("hex");
 }
 
-async function main(application) {
+function main(application) {
   // 検索結果を保存したファイルのリストを search.json に保存するため存在しなければあらかじめ作成する
   if (application.loadSharedDocuments("search.json") === null) {
     application.saveSharedDocuments("search.json", JSON.stringify({}));
@@ -80,7 +80,7 @@ async function main(application) {
     );
   });
 
-  const window = await application.createWindow();
+  const window = application.createWindow();
   window.setMaximumSize(800, 600);
   window.setMinimumSize(800, 600);
 }

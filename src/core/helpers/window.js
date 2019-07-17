@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 
-function createHelper(options) {
+function create(options) {
   options = options || {};
   options.show = false;
 
@@ -13,23 +13,26 @@ function createHelper(options) {
   return window;
 }
 
-function create(options) {
-  return new Promise(resolve => {
-    if (app.isReady() === true) {
-      resolve(createHelper(options));
-    } else {
-      app.on("ready", () => {
-        resolve(createHelper(options));
-      });
-    }
-  });
-}
-
 function destory(main) {
   main.close();
 }
 
+// electron でウインドウが作成できるようになるまで待機する
+function wait() {
+  return new Promise(function (resolve) {
+    if (app.isReady()) {
+      resolve();
+      return;
+    }
+
+    app.on("ready", function() {
+      resolve()
+    });
+  })
+}
+
 module.exports = {
   create,
-  destory
+  destory,
+  wait
 };

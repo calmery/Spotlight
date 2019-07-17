@@ -135,23 +135,20 @@ class Application extends EventEmitter {
   // Electron
 
   createWindow(options) {
-    const self = this;
+    const window = this._window.createWindow(options);
 
-    return this._window.createWindow(options).then(function(window) {
-      // ウインドウの作成中にアプリケーションが閉じられた場合にウインドウのみ表示されてしまうので対策する
-      if (self._alreadyClosed) {
-        window.close();
-        self._errorLog("The application is already closed");
-        return Promise.reject();
-      }
+    if (this._alreadyClosed) {
+      window.close();
+      this._errorLog("The application is already closed");
+      return;
+    }
 
-      self._alreadyBeenActioned = true;
-      self._log("createWindow(options): The window has been created");
+    this._alreadyBeenActioned = true;
+    this._log("createWindow(options): The window has been created");
 
-      window.loadURL(self.getUrl());
+    window.loadURL(this.getUrl());
 
-      return Promise.resolve(window);
-    });
+    return window;
   }
 
   destoryWindow(window) {

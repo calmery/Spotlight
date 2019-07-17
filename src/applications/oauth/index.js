@@ -5,15 +5,7 @@ const TwitterStrategy = require("passport-twitter").Strategy;
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
-async function main(application) {
-  // if (application.loadSharedAppData("authentication.json") !== null) {
-  //   // electron を使用してひとつもウインドウが作られることなくアプリケーションを終了しようとした場合は electron が起動したままになる
-  //   // 要は window-all-closed が呼ばれないのでアプリケーション自体が終了しない
-  //   application.log("Already authorized");
-  //   application.close();
-  //   return;
-  // }
-
+function main(application) {
   // Twitter Developers (https://developer.twitter.com/apps) で作成したアプリケーションではコールバック URL を指定する必要があるため
   // Reference: https://developer.twitter.com/en/docs/basics/apps/guides/callback-urls
   application.setPort(60321);
@@ -61,7 +53,7 @@ async function main(application) {
     })
   );
 
-  const window = await application.createWindow();
+  const window = application.createWindow();
   window.setMaximumSize(800, 600);
   window.setMinimumSize(800, 600);
 }

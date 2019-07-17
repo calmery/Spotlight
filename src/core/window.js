@@ -11,14 +11,11 @@ class Window {
   }
 
   createWindow(options) {
-    const self = this;
-
     // Reference: https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises
-    return createWindow(options).then(function(window) {
-      self._windows[window.id] = window;
-      window.setMenu(null);
-      return Promise.resolve(window);
-    });
+    const window = createWindow(options)
+    this._windows[window.id] = window;
+    window.setMenu(null);
+    return window;
   }
 
   destoryWindow(window) {
