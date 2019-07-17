@@ -1,4 +1,10 @@
 async function main(application) {
+  if (application.loadSharedAppData("authentication.json") === null) {
+    application.openApplication("oauth");
+    application.close();
+    return;
+  }
+
   application.post("/open", (request, response) => {
     application.openApplication(request.body.name);
     response.status(200).end();
