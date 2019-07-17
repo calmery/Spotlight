@@ -20,6 +20,20 @@ class Core {
   constructor() {
     // 起動済みのアプリケーションの情報を保持する
     this.applications = {};
+
+    // プロセスが終了するときに close イベントを送出する
+    const self = this;
+    process.on("exit", function() {
+      log("Process ends");
+      const applications = Object.entries(self.applications);
+
+      for (let i = 0; i < applications.length; i++) {
+        const name = applications[i][0];
+        const application = applications[i][1]
+        log(`Send a close event to application (${name})`);
+        application.emit("close");
+      }
+    });
   }
 
   async openApplication(applicationName) {
