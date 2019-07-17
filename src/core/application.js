@@ -1,10 +1,7 @@
+const path = require("path");
 const express = require("express");
 const EventEmitter = require("events");
-const { debug, absolutePath } = require("./helpers/utility");
-const {
-  create: createWindow,
-  destory: destoryWindow
-} = require("./helpers/window");
+const { debug } = require("./helpers/utility");
 const { exists } = require("./helpers/file");
 const Storage = require("./storage");
 const Server = require("./server");
@@ -40,10 +37,10 @@ class Application extends EventEmitter {
   // Private
 
   _setStaticPath() {
-    const commonStaticPath = absolutePath(__dirname, "../static");
+    const commonStaticPath = path.resolve(__dirname, "../static");
     this._server.use(express.static(commonStaticPath));
 
-    const staticPath = absolutePath(this._currentDirectory, "static");
+    const staticPath = path.resolve(this._currentDirectory, "static");
     if (exists(staticPath)) {
       this._server.use(express.static(staticPath));
     }
