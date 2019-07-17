@@ -1,6 +1,6 @@
 const electron = require("electron");
 const {
-  file: { read, write },
+  file: { read, write, remove },
   utility: { absolutePath }
 } = require("./helpers");
 
@@ -35,6 +35,10 @@ class Storage {
     return read(this._getPath(directoryPath, filePath));
   }
 
+  _remove(directoryPath, filePath) {
+    return remove(this._getPath(directoryPath, filePath));
+  }
+
   // AppData
 
   saveAppData(filePath, body) {
@@ -45,6 +49,10 @@ class Storage {
     return this._load(STORAGE_PATH_APP_DATA, filePath);
   }
 
+  removeAppData(filePath) {
+    return this._remove(STORAGE_PATH_APP_DATA, filePath);
+  }
+
   // Documents
 
   saveDocuments(filePath, body) {
@@ -53,6 +61,10 @@ class Storage {
 
   loadDocuments(filePath) {
     return this._load(STORAGE_PATH_DOCUMENTS, filePath);
+  }
+
+  removeDocuments(filePath) {
+    return this._remove(STORAGE_PATH_DOCUMENTS, filePath);
   }
 }
 

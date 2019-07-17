@@ -173,12 +173,20 @@ class Application extends EventEmitter {
     return this._sharedStorage.loadAppData(filePath);
   }
 
+  removeSharedAppData(filePath) {
+    return this._sharedStorage.removeAppData(filePath);
+  }
+
   saveSharedDocuments(filePath, body) {
     return this._sharedStorage.saveDocuments(filePath, body);
   }
 
   loadSharedDocuments(filePath) {
     return this._sharedStorage.loadDocuments(filePath);
+  }
+
+  removeSharedDocuments(filePath) {
+    return this._sharedStorage.removeDocuments(filePath);
   }
 
   saveAppData(filePath, body) {
@@ -189,12 +197,20 @@ class Application extends EventEmitter {
     return this._storage.loadAppData(filePath);
   }
 
+  removeAppData(filePath) {
+    return this._storage.removeAppData(filePath);
+  }
+
   saveDocuments(filePath, body) {
     return this._storage.saveDocuments(filePath, body);
   }
 
   loadDocuments(filePath) {
     return this._storage.loadDocuments(filePath);
+  }
+
+  removeDocuments(filePath) {
+    return this._storage.removeDocuments(filePath);
   }
 
   // Manage

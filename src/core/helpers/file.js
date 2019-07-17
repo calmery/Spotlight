@@ -81,6 +81,16 @@ function removeDirectory(path) {
   return removeDirectoryHelper(path);
 }
 
+function remove(path) {
+  if (!isAbsolutePath(path) || !exists(path)) {
+    return false;
+  }
+
+  fs.unlinkSync(path);
+
+  return true;
+}
+
 function write(path, content) {
   if (!isAbsolutePath(path)) {
     return false;
@@ -109,6 +119,7 @@ module.exports = {
   exists,
   makeDirectory,
   read,
+  remove,
   removeDirectory,
   write
 };
