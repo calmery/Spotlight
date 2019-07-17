@@ -70,6 +70,10 @@ class Application extends EventEmitter {
   // Control
 
   close() {
+    if (this._alreadyClosed) {
+      return;
+    }
+
     this._server.close();
     this._window.destoryAll();
     this._alreadyClosed = true;
