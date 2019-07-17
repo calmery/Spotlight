@@ -1,4 +1,5 @@
-const { absolutePath, debug } = require("./helpers/utility");
+const path = require("path");
+const { debug } = require("./helpers/utility");
 const { exists } = require("./helpers/file");
 const { wait } = require("./helpers/window");
 const Application = require("./application");
@@ -16,7 +17,7 @@ const errorLog = (method, message) => {
 };
 
 const getApplicationPath = applicationName => {
-  return absolutePath(__dirname, "../applications/", applicationName);
+  return path.resolve(__dirname, "../applications/", applicationName);
 };
 
 // Main
@@ -53,7 +54,7 @@ class Core {
     try {
       this.applications[applicationName] = new Application(this, {
         name: applicationName,
-        currentDirectory: absolutePath(
+        currentDirectory: path.resolve(
           __dirname,
           `../applications/${applicationName}`
         )

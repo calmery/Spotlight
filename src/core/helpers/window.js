@@ -6,7 +6,7 @@ function create(options) {
 
   const window = new BrowserWindow(options);
 
-  window.once("ready-to-show", () => {
+  window.once("ready-to-show", function() {
     window.show();
   });
 

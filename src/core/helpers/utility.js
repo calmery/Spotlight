@@ -1,4 +1,3 @@
-const path = require("path");
 const colors = require("colors/safe");
 
 function debug(type, name, message) {
@@ -14,7 +13,5 @@ function debug(type, name, message) {
 }
 
 module.exports = {
-  absolutePath: path.resolve,
-  debug,
-  isAbsolutePath: path.isAbsolute
+  debug
 };
