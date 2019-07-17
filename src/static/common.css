@@ -385,7 +385,15 @@ body#_application:after {
 
 ._sidebar ._navigator ._menu ._text ._description {
   font-size: 10px;
+  width: calc(200px - 20px * 2);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   color: rgba(255, 255, 255, 0.5);
+}
+
+._sidebar ._navigator ._menu._active ._text ._description {
+  width: calc(200px - 20px * 2 - 5px);
 }
 
 ._sidebar ._navigator ._menu ._badge {
@@ -404,10 +412,12 @@ body#_application:after {
 
 ._my_profile {
   width: 200px;
+  height: 81px;
   background: rgba(2, 159, 218, 1);
   color: rgba(255, 255, 255, 1);
   font-family: Quicksand, sans-serif;
   border-top: 1px solid rgba(0, 139, 198, 1);
+  border-right: 1px solid rgba(0, 139, 198, 1);
   padding: 15px 0;
   bottom: 0;
   left: 0;
@@ -732,9 +742,10 @@ body#_application:after {
 ._sidebar {
   top: 0;
   left: 0;
-  height: 100%;
+  height: calc(100vh - 111px);
   position: fixed;
   border-right: 1px solid rgba(0, 139, 198, 1);
+  overflow-y: scroll;
 }
 
 ._main {
