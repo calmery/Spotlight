@@ -36,12 +36,14 @@ class Core {
       applicationName
     );
 
+    // アプリケーションが存在するかどうかを確認する
     if (!file.exists(applicationPath)) {
       errorLog(`Application (${applicationName}) is not found`);
       return;
     }
 
-    if (this.applications[applicationName] !== undefined) {
+    // アプリケーションが起動していないことを確認する
+    if (this.applications.hasOwnProperty(applicationName)) {
       errorLog(`Application (${applicationName}) is already opened`);
       return;
     }
@@ -65,10 +67,11 @@ class Core {
 
       log(`Application (${applicationName}) has been opened`);
 
+      // アプリケーション側から module.exports された関数を呼び出す
       require(applicationPath)(this.applications[applicationName]);
-    } catch (_) {
+    } catch (error) {
       delete this.applications[applicationName];
-      errorLog(`Application (${applicationName}) structure is incorrect`);
+      errorLog(`Application (${applicationName}) structure is incorrect\n\tError: ${error.message}`);
     }
   }
 
@@ -84,18 +87,19 @@ class Core {
       applicationName
     );
 
-    // アプリケーションの実行ファイルが見つからない
+    // アプリケーションが存在するかどうかを確認する
     if (!file.exists(applicationPath)) {
       errorLog(`Application (${applicationName}) is not found`);
       return;
     }
 
-    // アプリケーションが起動していない
+    // アプリケーションが起動していることを確認する
     if (!this.applications.hasOwnProperty(applicationName)) {
       errorLog(`Application (${applicationName}) has not been opened`);
       return;
     }
 
+    // Application クラスの close を呼び出した上で，Core の管理，this._applications から削除する
     this.applications[applicationName].close();
     delete this.applications[applicationName];
 
