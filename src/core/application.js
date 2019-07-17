@@ -13,9 +13,10 @@ const Window = require("./window");
 // Main
 
 class Application extends EventEmitter {
-  constructor(options) {
+  constructor(core, options) {
     super();
 
+    this._core = core;
     this._name = options.name;
     this._currentDirectory = options.currentDirectory;
     this._alreadyClosed = false;
@@ -54,6 +55,16 @@ class Application extends EventEmitter {
 
   _errorLog(message) {
     return debug("red", `Application:${this._name}`, message);
+  }
+
+  // Applications
+
+  openApplication(applicationName) {
+    this._core.openApplication(applicationName);
+  }
+
+  closeApplication(applicationName) {
+    this._core.closeApplication(applicationName);
   }
 
   // Debug

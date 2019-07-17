@@ -31,17 +31,24 @@ class Core {
     })`;
 
     if (applicationName === undefined) {
-      return errorLog(method, "Application name invalid");
+      errorLog(method, "Application name invalid");
+      return;
     }
 
     const applicationPath = getApplicationPath(applicationName);
 
     if (!exists(applicationPath)) {
-      return errorLog(method, "Application is not found");
+      errorLog(method, "Application is not found");
+      return;
+    }
+
+    if (this.applications[applicationName] !== undefined) {
+      errorLog(method, "Application is already opened");
+      return;
     }
 
     try {
-      this.applications[applicationName] = new Application({
+      this.applications[applicationName] = new Application(this, {
         name: applicationName,
         currentDirectory: absolutePath(
           __dirname,
