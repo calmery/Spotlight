@@ -48,15 +48,15 @@ class Application extends EventEmitter {
   // Private
 
   _setStaticPath() {
-    // 共通の静的ファイルがあれば使用する
-    const commonStaticPath = path.resolve(__dirname, "../static");
-    this._server.use(express.static(commonStaticPath));
-
     // アプリケーション内に static フォルダがあれば使用する
     const staticPath = path.resolve(this._currentDirectory, "static");
     if (file.exists(staticPath)) {
       this._server.use(express.static(staticPath));
     }
+
+    // 共通の静的ファイルがあれば使用する
+    const commonStaticPath = path.resolve(__dirname, "../static");
+    this._server.use(express.static(commonStaticPath));
   }
 
   _handleFocus() {
