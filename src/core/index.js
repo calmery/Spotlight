@@ -84,7 +84,11 @@ class Core {
       require(applicationPath)(this.applications[applicationName]);
 
       // open イベントを送出する
-      this.applications[applicationName].emit("open");
+      // アプリケーションを立ち上げてすぐに終了した場合，このイベントが呼ばれる前にアプリケーション自体が終了している
+      // そのため emit の送る際はアプリケーションの存在確認をする
+      if (this.applications.hasOwnProperty(applicationName)) {
+        this.applications[applicationName].emit("open");
+      }
     } catch (error) {
       delete this.applications[applicationName];
       errorLog(
