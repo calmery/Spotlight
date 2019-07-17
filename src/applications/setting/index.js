@@ -14,7 +14,7 @@ function main(application) {
     }
 
     response.status(200).end();
-    process.exit(1);
+    process.exit(0);
   });
 
   application.on("open", () => {
