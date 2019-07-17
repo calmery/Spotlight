@@ -6,13 +6,13 @@ passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
 async function main(application) {
-  if (application.loadSharedAppData("authentication.json") !== null) {
-    // electron を使用してひとつもウインドウが作られることなくアプリケーションを終了しようとした場合は electron が起動したままになる
-    // 要は window-all-closed が呼ばれないのでアプリケーション自体が終了しない
-    application.log("Already authorized");
-    application.close();
-    return;
-  }
+  // if (application.loadSharedAppData("authentication.json") !== null) {
+  //   // electron を使用してひとつもウインドウが作られることなくアプリケーションを終了しようとした場合は electron が起動したままになる
+  //   // 要は window-all-closed が呼ばれないのでアプリケーション自体が終了しない
+  //   application.log("Already authorized");
+  //   application.close();
+  //   return;
+  // }
 
   // Twitter Developers (https://developer.twitter.com/apps) で作成したアプリケーションではコールバック URL を指定する必要があるため
   // Reference: https://developer.twitter.com/en/docs/basics/apps/guides/callback-urls
@@ -46,6 +46,7 @@ async function main(application) {
           JSON.stringify(user)
         );
         application.log("Authorized");
+        application.openApplication("controller");
         application.close();
         return done(null, user);
       }
