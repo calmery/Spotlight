@@ -1,7 +1,7 @@
 async function main(application) {
   application.post("/open", (request, response) => {
-    console.log(request.body);
-    response.send("OK");
+    application.openApplication(request.body.name);
+    response.status(200).end();
   });
 
   const window = await application.createWindow({
