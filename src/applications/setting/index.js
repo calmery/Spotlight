@@ -5,7 +5,7 @@ async function main(application) {
     process.exit(1);
   });
 
-  const window = await application.createWindow()
+  const window = await application.createWindow();
   window.setMaximumSize(800, 600);
   window.setMinimumSize(800, 600);
 }

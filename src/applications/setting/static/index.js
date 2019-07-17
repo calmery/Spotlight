@@ -1,5 +1,5 @@
 function removeAccount() {
-  if(confirm("認証情報，検索データを削除してアプリケーションを終了します")) {
+  if (confirm("認証情報，検索データを削除してアプリケーションを終了します")) {
     postJson("/remove");
   }
 }
