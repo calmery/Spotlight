@@ -69,19 +69,6 @@ class Core extends Events {
     });
   }
 
-  _exitApplication(applicationName) {
-    const application = this._getRunningApplication(applicationName);
-
-    if (application === null) {
-      return;
-    }
-
-    // アプリケーションに登録されている全てのイベントを削除し，実行中のアプリケーションの一覧から削除する
-    application.removeAllListeners();
-    application.exit();
-    delete this._runningApplications[applicationName];
-  }
-
   _getApplicationPath(applicationName) {
     return path.resolve(this._applicationDirectoryPath, applicationName);
   }
@@ -134,14 +121,14 @@ class Core extends Events {
     // アプリケーションにイベントを登録する
     application.addListener(
       "exit",
-      this._exitApplication.bind(this, applicationName)
+      this.exitApplication.bind(this, applicationName)
     );
 
     try {
       require(applicationPath)(application);
       log(`Application (${applicationName}) has been opened`);
     } catch (error) {
-      this._exitApplication(applicationName);
+      this.exitApplication(applicationName);
       errorLog(
         `Application (${applicationName}) structure is incorrect\n\tError: ${
           error.message
@@ -170,7 +157,10 @@ class Core extends Events {
       return;
     }
 
-    this._exitApplication(applicationName);
+    // アプリケーションに登録されている全てのイベントを削除し，実行中のアプリケーションの一覧から削除する
+    application.removeAllListeners();
+    application.exit();
+    delete this._runningApplications[applicationName];
 
     log(
       `A request has been sent to terminate application (${applicationName})`
