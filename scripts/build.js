@@ -1,16 +1,15 @@
-"use strict";
-
 const fs = require("fs");
 const path = require("path");
 const electronBuilder = require("electron-builder");
 
 // Build
 
-// NOTE: https://www.electron.build/configuration/win
-const buildForWindows = async () => {
-  const { build, Platform } = electronBuilder;
+const build = electronBuilder.build;
+const Platform = electronBuilder.Platform;
 
-  await build({
+// NOTE: https://www.electron.build/configuration/win
+function buildForWindows() {
+  return build({
     targets: Platform.WINDOWS.createTarget("nsis", electronBuilder.Arch.ia32),
     config: {
       productName: "Spotlight",
@@ -23,13 +22,11 @@ const buildForWindows = async () => {
       icon: path.resolve(__dirname, "../src/static/icon.icns")
     }
   });
-};
+}
 
 // NOTE: https://www.electron.build/configuration/mac
-const buildForMacOS = async () => {
-  const { build, Platform } = electronBuilder;
-
-  await build({
+function buildForMacOS() {
+  return build({
     targets: Platform.MAC.createTarget(),
     config: {
       productName: "Spotlight",
@@ -43,11 +40,11 @@ const buildForMacOS = async () => {
       icon: path.resolve(__dirname, "../src/static/icon.icns")
     }
   });
-};
+}
 
 // Main
 
-(async () => {
+async function main() {
   try {
     await buildForWindows();
     console.log("Build Successful: Windows");
@@ -55,12 +52,12 @@ const buildForMacOS = async () => {
     console.log(error.message || error.code || error);
   }
 
-  console.log();
-
   try {
     await buildForMacOS();
     console.log("Build Successful: Mac OS");
   } catch (error) {
     console.log(error.message || error.code || error);
   }
-})();
+}
+
+main();
