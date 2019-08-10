@@ -320,6 +320,10 @@ body#_application:after {
   float: left;
 }
 
+._sidebar::-webkit-scrollbar {
+  display: none;
+}
+
 ._sidebar._profile_active {
   margin-bottom: 95px;
 }
