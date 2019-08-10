@@ -26,7 +26,7 @@ const buildForWindows = async () => {
 };
 
 // NOTE: https://www.electron.build/configuration/mac
-const buildForOSX = async () => {
+const buildForMacOS = async () => {
   const { build, Platform } = electronBuilder;
 
   await build({
@@ -50,9 +50,16 @@ const buildForOSX = async () => {
 (async () => {
   try {
     await buildForWindows();
-    await buildForOSX();
+    console.log("Build Successful: Windows");
+  } catch (error) {
+    console.log(error.message || error.code || error);
+  }
 
-    console.log("Build Successful");
+  console.log();
+
+  try {
+    await buildForMacOS();
+    console.log("Build Successful: Mac OS");
   } catch (error) {
     console.log(error.message || error.code || error);
   }
