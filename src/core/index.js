@@ -169,6 +169,7 @@ class Core extends Events {
       return;
     }
 
+    this._existApplication(applicationName);
     application.exit();
 
     log(
