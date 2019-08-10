@@ -13,8 +13,8 @@ function create(options) {
   return window;
 }
 
-function destory(main) {
-  main.close();
+function destory(window) {
+  window.close();
 }
 
 // electron でウインドウが作成できるようになるまで待機する
