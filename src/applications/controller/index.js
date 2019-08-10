@@ -5,7 +5,7 @@ function main(application) {
     return;
   }
 
-  application.post("/open", (request, response) => {
+  application.post("/open", function(request, response) {
     application.openApplication(request.body.name);
     response.status(200).end();
   });

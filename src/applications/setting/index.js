@@ -1,5 +1,5 @@
 function main(application) {
-  application.post("/remove", (_, response) => {
+  application.post("/remove", function(_, response) {
     application.removeSharedAppData("authentication.json");
 
     // 検索データを削除する

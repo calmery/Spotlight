@@ -2,8 +2,12 @@ const expressSession = require("express-session");
 const passport = require("passport");
 const TwitterStrategy = require("passport-twitter").Strategy;
 
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user, done) => done(null, user));
+passport.serializeUser(function(user, done) {
+  return done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+  return done(null, user);
+});
 
 function main(application) {
   // Twitter Developers (https://developer.twitter.com/apps) で作成したアプリケーションではコールバック URL を指定する必要があるため

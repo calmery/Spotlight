@@ -3,7 +3,11 @@ function get(url, parameters) {
   const p = new URLSearchParams();
 
   if (parameters !== undefined) {
-    Object.entries(parameters).map(([key, value]) => p.append(key, value));
+    Object.entries(parameters).map(function(parameter) {
+      const key = parameter[0];
+      const value = parameter[1];
+      p.append(key, value);
+    });
   }
 
   u.search = p.toString();
