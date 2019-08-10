@@ -360,6 +360,7 @@ body#_application:after {
   background: rgba(2, 159, 218, 1);
   min-height: 1px;
   border-bottom: 1px solid rgba(0, 139, 198, 1);
+  cursor: pointer;
 }
 
 ._sidebar ._navigator ._menu:hover {
