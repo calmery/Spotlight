@@ -1,26 +1,3 @@
-function getJson(url, parameters) {
-  const u = new URL(`${window.location.origin}${url}`);
-  const p = new URLSearchParams();
-
-  if (parameters !== undefined) {
-    Object.entries(parameters).map(([key, value]) => p.append(key, value));
-  }
-
-  u.search = p.toString();
-  return fetch(u.toString());
-}
-
-function postJson(url, json) {
-  return fetch(url, {
-    method: "POST",
-    cache: "no-cache",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8"
-    },
-    body: JSON.stringify(json)
-  });
-}
-
 let data = null;
 
 function load(name) {
@@ -31,14 +8,13 @@ function load(name) {
   const menus = document.querySelectorAll(".file");
 
   for (let i = 0; i < menus.length; i++) {
-    console.log(menus);
     menus[i].className = "_menu file";
   }
 
   document.getElementById("output").innerHTML = "";
   data = null;
 
-  getJson("/load", { name })
+  get("/load", { name })
     .catch(function() {
       alert("データの読み込みに失敗しました");
     })
@@ -75,11 +51,13 @@ function renderFiles(files) {
 }
 
 function updateFiles() {
-  getJson("/all")
+  get("/all")
     .catch(function() {
       alert("ファイル一覧の取得に失敗しました");
     })
-    .then(response => response.json())
+    .then(function(response) {
+      return response.json();
+    })
     .then(renderFiles);
 }
 
@@ -91,7 +69,7 @@ function save() {
     return;
   }
 
-  postJson("/save", data).then(function(response) {
+  post("/save", data).then(function(response) {
     if (response.status !== 200) {
       alert("保存に失敗しました");
       return;

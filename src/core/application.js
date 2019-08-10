@@ -63,7 +63,7 @@ class Application extends Events {
     this._server.use(express.static(commonStaticPath));
   }
 
-  _handleFocus() {
+  _handleWindowFocus() {
     const isFocused = this._window.isFocused();
     if (isFocused !== this._isFocused) {
       this._isFocused = isFocused;
@@ -76,7 +76,7 @@ class Application extends Events {
     }
   }
 
-  _handleClose() {
+  _handleWindowClose() {
     // 全てのウインドウが閉じられた場合はアプリケーションを終了する
     if (this._window.getCount() === 0) {
       this.exit();
@@ -164,7 +164,7 @@ class Application extends Events {
     }
   }
 
-  // Electron
+  // Window
 
   createWindow(options) {
     this._alreadyBeenActioned = true;
@@ -176,11 +176,23 @@ class Application extends Events {
 
     const window = this._window.create(options);
     window.loadURL(this.getUrl());
-    window.on("focus", this._handleFocus.bind(this));
-    window.on("blur", this._handleFocus.bind(this));
-    window.on("close", this._handleClose.bind(this));
+    window.on("focus", this._handleWindowFocus.bind(this));
+    window.on("blur", this._handleWindowFocus.bind(this));
+    window.on("close", this._handleWindowClose.bind(this));
 
     log(this._name, "The window has been created");
+
+    return window;
+  }
+
+  createFixedSizeWindow(options) {
+    options = options || {};
+    options.width = options.width || 800;
+    options.height = options.height || 600;
+
+    const window = this.createWindow(options);
+    window.setMaximumSize(200, 600);
+    window.setMinimumSize(200, 600);
 
     return window;
   }

@@ -17,12 +17,10 @@ function main(application) {
     process.exit(0);
   });
 
-  const window = application.createWindow({
+  application.createFixedSizeWindow({
     width: 800,
     height: 600
   });
-  window.setMaximumSize(800, 600);
-  window.setMinimumSize(800, 600);
 }
 
 module.exports = main;

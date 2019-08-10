@@ -36,11 +36,11 @@ function render(tweets) {
           <div class="_status">
             <div class="_reaction">
               <span class="_retweet">
-                <span class="_icon_font">}</span>
+                <span class="_font_condense">}</span>
                 ${status.retweet_count}
               </span>
               <span class="_favorite">
-                <span class="_icon_font">—</span>
+                <span class="_font_condense">—</span>
                 ${status.favorite_count}
               </span>
             </div>
@@ -136,8 +136,8 @@ function renderUserMentions(userMentions) {
         ${userMentions
           .map(function(userMention) {
             return `
-            <span class="_tag _bg_primary">
-            <span class="_icon_font">ë</span> @${userMention.screen_name}
+            <span class="_tag _background_primary">
+            <span class="_font_condense">ë</span> @${userMention.screen_name}
             </span>
           `;
           })
@@ -158,8 +158,8 @@ function renderHashTags(hashTags) {
         ${hashTags
           .map(function(hashTag) {
             return `
-            <span class="_tag _bg_primary">
-              <span class="_icon_font">a</span> ${hashTag.text}
+            <span class="_tag _background_primary">
+              <span class="_font_condense">a</span> ${hashTag.text}
             </span>
           `;
           })
@@ -180,8 +180,8 @@ function renderUrls(urls) {
         ${urls
           .map(function(url) {
             return `
-            <span class="_tag _bg_primary">
-              <span class="_icon_font">Y</span> ${url.url}
+            <span class="_tag _background_primary">
+              <span class="_font_condense">Y</span> ${url.url}
             </span>
           `;
           })

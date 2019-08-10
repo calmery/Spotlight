@@ -16,12 +16,56 @@ function exists(filePath) {
   }
 }
 
+function getDirectories(directoryPath) {
+  if (!path.isAbsolute(directoryPath)) {
+    return null;
+  }
+
+  const directoryNames = [];
+  const fileOrDirectoryNames = fs.readdirSync(directoryPath);
+
+  fileOrDirectoryNames.forEach(function(fileOrDirectoryName) {
+    const fileOrDirectoryPath = path.resolve(
+      directoryPath,
+      fileOrDirectoryName
+    );
+
+    if (fs.statSync(fileOrDirectoryPath).isDirectory()) {
+      directoryNames.push(fileOrDirectoryName);
+    }
+  });
+
+  return directoryNames;
+}
+
+function getFiles(directoryPath) {
+  if (!path.isAbsolute(directoryPath)) {
+    return null;
+  }
+
+  const fileNames = [];
+  const fileOrDirectoryNames = fs.readdirSync(directoryPath);
+
+  fileOrDirectoryNames.forEach(function(fileOrDirectoryName) {
+    const fileOrDirectoryPath = path.resolve(
+      directoryPath,
+      fileOrDirectoryName
+    );
+
+    if (fs.statSync(fileOrDirectoryPath).isFile()) {
+      fileNames.push(fileOrDirectoryName);
+    }
+  });
+
+  return fileNames;
+}
+
 function makeDirectory(directoryPath) {
   if (!path.isAbsolute(directoryPath)) {
     return false;
   }
 
-  // '/' または '\' でパスを分割する
+  // Windows が `\` をパスとして扱っている．`/' または '\' でパスを分割する
   const directories = directoryPath.split(/\/|\\/);
 
   // パスは /Users/example/...，または C:\Users\example\... の形なので先頭は不要，shift で削除する
@@ -130,57 +174,13 @@ function writeFile(filePath, content) {
   }
 }
 
-function getFiles(directoryPath) {
-  if (!path.isAbsolute(directoryPath)) {
-    return null;
-  }
-
-  const fileNames = [];
-  const fileOrDirectoryNames = fs.readdirSync(directoryPath);
-
-  fileOrDirectoryNames.forEach(function(fileOrDirectoryName) {
-    const fileOrDirectoryPath = path.resolve(
-      directoryPath,
-      fileOrDirectoryName
-    );
-
-    if (fs.statSync(fileOrDirectoryPath).isFile()) {
-      fileNames.push(fileOrDirectoryName);
-    }
-  });
-
-  return fileNames;
-}
-
-function getDirectories(directoryPath) {
-  if (!path.isAbsolute(directoryPath)) {
-    return null;
-  }
-
-  const directoryNames = [];
-  const fileOrDirectoryNames = fs.readdirSync(directoryPath);
-
-  fileOrDirectoryNames.forEach(function(fileOrDirectoryName) {
-    const fileOrDirectoryPath = path.resolve(
-      directoryPath,
-      fileOrDirectoryName
-    );
-
-    if (fs.statSync(fileOrDirectoryPath).isDirectory()) {
-      directoryNames.push(fileOrDirectoryName);
-    }
-  });
-
-  return directoryNames;
-}
-
 module.exports = {
   exists,
+  getDirectories,
+  getFiles,
   makeDirectory,
   readFile,
   removeFile,
   removeDirectory,
-  writeFile,
-  getFiles,
-  getDirectories
+  writeFile
 };

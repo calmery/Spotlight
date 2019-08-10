@@ -54,9 +54,10 @@ function main(application) {
     })
   );
 
-  const window = application.createWindow();
-  window.setMaximumSize(800, 600);
-  window.setMinimumSize(800, 600);
+  application.createFixedSizeWindow({
+    width: 800,
+    height: 600
+  });
 }
 
 module.exports = main;

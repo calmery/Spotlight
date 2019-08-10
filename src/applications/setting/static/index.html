@@ -1,31 +1,11 @@
-<!DOCTYPE html>
-<html lang="ja">
+<html>
   <head>
-    <meta charset="utf-8" />
     <title>設定</title>
     <link rel="stylesheet" href="common.css" />
-    <style>
-      ._sidebar {
-        top: 0;
-        left: 0;
-        height: 100%;
-        position: fixed;
-        border-right: 1px solid rgba(0, 139, 198, 1);
-      }
-      ._main {
-        top: 0;
-        right: 0;
-        position: absolute;
-      }
-      ._value {
-        font-size: 10px;
-        color: rgba(150, 150, 150, 1);
-      }
-    </style>
   </head>
 
   <body id="_application">
-    <section class="_sidebar _profile_active">
+    <section class="_sidebar _logo_space_required">
       <div class="_label">
         <div class="_text">
           Spotlight
@@ -42,31 +22,27 @@
       </nav>
     </section>
 
-    <section class="_my_profile">
-      <div
-        class="_icon"
-        id="my_icon"
-        style="background: url(icon.png) center / cover no-repeat"
-      ></div>
-      <div class="_name" id="my_name">Spotlight</div>
-      <div class="_id" id="my_screen_name">
+    <section class="_logo">
+      <div class="_icon"></div>
+      <div class="_name">Spotlight</div>
+      <div class="_id">
         Cyber Crime Prevention Volunteer
       </div>
     </section>
 
     <section class="_main">
-      <div id="configs">
-        <div class="_content clearfix" v-for="(data, key) in configs">
-          <div class="float_l">
-            Twitter の認証情報を削除する
-            <div class="_value">
-              このアプリケーションに保存されている Twitter
-              の認証情報，検索データを削除します
-            </div>
+      <div class="_content clearfix">
+        <div class="float_l">
+          Twitter の認証情報を削除する
+          <div class="_value">
+            このアプリケーションに保存されている Twitter
+            の認証情報，検索データを削除します
           </div>
-          <div class="float_r">
-            <span class="_btn _bg_danger" onclick="removeAccount()">削除</span>
-          </div>
+        </div>
+        <div class="float_r">
+          <span class="_button _background_danger" onclick="removeAccount()"
+            >削除</span
+          >
         </div>
       </div>
     </section>

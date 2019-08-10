@@ -1,4 +1,6 @@
-const { app, BrowserWindow } = require("electron");
+const electron = require("electron");
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
 
 function create(options) {
   options = options || {};
