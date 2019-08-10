@@ -9,15 +9,13 @@ class Window {
     this._windows = {};
   }
 
-  // Private
-
-  createWindow(options) {
-    // Reference: https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises
+  create(options) {
     const window = createWindow(options);
-    this._windows[window.id] = window;
     window.setMenu(null);
 
-    // 「x」ボタンでウインドウが閉じられたとき，this._windows から削除する
+    this._windows[window.id] = window;
+
+    // ウインドウが閉じられたとき，this._windows から削除する
     const self = this;
     window.on("close", function() {
       delete self._windows[window.id];
@@ -26,7 +24,7 @@ class Window {
     return window;
   }
 
-  destoryWindow(window) {
+  destory(window) {
     if (window.isDestroyed()) {
       return true;
     }
@@ -44,10 +42,8 @@ class Window {
   }
 
   destoryAll() {
-    const windows = Object.values(this._windows);
-
-    for (let i = 0; i < windows.length; i++) {
-      this.destoryWindow(windows[i]);
+    for (const windowId in this._windows) {
+      this.destory(this._windows[windowId]);
     }
   }
 
@@ -58,7 +54,7 @@ class Window {
   isFocused() {
     const windows = Object.values(this._windows);
 
-    return windows.every(function(window) {
+    return windows.some(function(window) {
       return window.isFocused();
     });
   }

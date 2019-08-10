@@ -1,7 +1,7 @@
 function main(application) {
   if (application.loadSharedAppData("authentication.json") === null) {
     application.openApplication("oauth");
-    application.close();
+    application.exit();
     return;
   }
 

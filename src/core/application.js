@@ -1,11 +1,11 @@
-const path = require("path");
-const EventEmitter = require("events");
+const Events = require("events");
 const express = require("express");
-const utility = require("./helpers/utility");
-const file = require("./helpers/file");
+const path = require("path");
 const Storage = require("./storage");
 const Server = require("./server");
 const Window = require("./window");
+const file = require("./helpers/file");
+const utility = require("./helpers/utility");
 
 // Helper Functions
 
@@ -19,20 +19,24 @@ function errorLog(applicationName, message) {
 
 // Main
 
-class Application extends EventEmitter {
-  constructor(core, options) {
+class Application extends Events {
+  constructor(options) {
     super();
 
-    this._core = core;
     this._name = options.name;
-    this._currentDirectory = options.currentDirectory;
+    this._path = options.path;
     this._alreadyClosed = false;
     this._isFocused = true; // 起動時点ではフォーカスされている
 
+    // Application
+
+    this.openApplication = options.openApplication;
+    this.exitApplication = options.exitApplication;
+
     // Storage
 
-    this._sharedStorage = new Storage();
     this._storage = new Storage(this._name);
+    this._sharedStorage = new Storage();
 
     // Server
 
@@ -49,7 +53,7 @@ class Application extends EventEmitter {
 
   _setStaticPath() {
     // アプリケーション内に static フォルダがあれば使用する
-    const staticPath = path.resolve(this._currentDirectory, "static");
+    const staticPath = path.resolve(this._path, "static");
     if (file.exists(staticPath)) {
       this._server.use(express.static(staticPath));
     }
@@ -63,34 +67,35 @@ class Application extends EventEmitter {
     const isFocused = this._window.isFocused();
     if (isFocused !== this._isFocused) {
       this._isFocused = isFocused;
-      this.emit(isFocused ? "focus" : "blur");
+
+      if (isFocused) {
+        this.emit("focus");
+      } else {
+        this.emit("blur");
+      }
+    }
+  }
+
+  _handleClose() {
+    // 全てのウインドウが閉じられた場合はアプリケーションを終了する
+    if (this._window.getCount() === 0) {
+      this.exit();
     }
   }
 
   // Control
 
-  close() {
+  exit() {
     if (this._alreadyClosed) {
       return;
     }
 
+    this._alreadyClosed = true;
+    this.emit("exit");
     this._server.close();
     this._window.destoryAll();
-    this._alreadyClosed = true;
-    this.emit("close");
+
     log(this._name, "Application has been closed");
-  }
-
-  // Applications
-
-  openApplication(applicationName) {
-    // core の openApplication は async function なので場合によって待機が必要な場合がある
-    // 例として，oauth での認証後に controller を開く場合，controller の起動を待って，oauth を終了する必要がある
-    return this._core.openApplication(applicationName);
-  }
-
-  closeApplication(applicationName) {
-    this._core.closeApplication(applicationName);
   }
 
   // Debug
@@ -161,10 +166,6 @@ class Application extends EventEmitter {
 
   // Electron
 
-  getWindowCount() {
-    return this._window.getCount();
-  }
-
   createWindow(options) {
     this._alreadyBeenActioned = true;
 
@@ -173,10 +174,11 @@ class Application extends EventEmitter {
       return;
     }
 
-    const window = this._window.createWindow(options);
+    const window = this._window.create(options);
     window.loadURL(this.getUrl());
     window.on("focus", this._handleFocus.bind(this));
     window.on("blur", this._handleFocus.bind(this));
+    window.on("close", this._handleClose.bind(this));
 
     log(this._name, "The window has been created");
 
@@ -184,7 +186,7 @@ class Application extends EventEmitter {
   }
 
   destoryWindow(window) {
-    if (this._window.destoryWindow(window)) {
+    if (this._window.destory(window)) {
       log(this._name, "The window has been destoryed");
       return;
     }

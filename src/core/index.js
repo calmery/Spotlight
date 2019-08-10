@@ -1,8 +1,9 @@
+const Events = require("events");
 const path = require("path");
-const utility = require("./helpers/utility");
-const file = require("./helpers/file");
-const window = require("./helpers/window");
 const Application = require("./application");
+const file = require("./helpers/file");
+const utility = require("./helpers/utility");
+const window = require("./helpers/window");
 
 // Helper Functions
 
@@ -16,124 +17,163 @@ function errorLog(message) {
 
 // Main
 
-class Core {
+class Core extends Events {
   constructor() {
-    // 起動済みのアプリケーションの情報を保持する
-    this.applications = {};
+    super();
 
-    // プロセスが終了するときに close イベントを送出する
+    this._runningApplications = {};
+    this._hasCompletedWindowPreparation = false;
+    this._applicationDirectoryPath = path.resolve(
+      __dirname,
+      "../applications/"
+    );
+
     const self = this;
-    process.on("exit", function() {
-      log("Process ends");
-      const applications = Object.entries(self.applications);
 
-      for (let i = 0; i < applications.length; i++) {
-        const name = applications[i][0];
-        const application = applications[i][1]
-        log(`Send a close event to application (${name})`);
-        application.emit("close");
+    // ウインドウ生成の準備が完了するまで待機し，準備が完了した時点で ready イベントを送信する
+    window.waitUntilReady().then(function() {
+      log("Ready");
+      self._hasCompletedWindowPreparation = true;
+      self.emit("ready");
+    });
+
+    // プロセスが終了する際に，実行中のアプリケーション全てに exit イベントを送信する
+    process.on("exit", function() {
+      for (const application in this._runningApplications) {
+        application.emit("exit");
       }
+      log("Exit");
+      self.emit("exit");
     });
   }
 
-  async openApplication(applicationName) {
-    await window.wait();
+  // Private methods
+
+  _existApplication(applicationName) {
+    const maybeApplicationNames = file.getDirectories(
+      this._applicationDirectoryPath
+    );
+
+    const self = this;
+    return maybeApplicationNames.some(function(maybeApplicationName) {
+      const applicationEntryPoint = path.resolve(
+        self._getApplicationPath(maybeApplicationName),
+        "index.js"
+      );
+
+      return (
+        // アプリケーションのエントリーポイントとして index.js が存在することを確認する
+        file.exists(applicationEntryPoint) &&
+        maybeApplicationName === applicationName
+      );
+    });
+  }
+
+  _exitApplication(applicationName) {
+    const application = this._getRunningApplication(applicationName);
+
+    if (application === null) {
+      return;
+    }
+
+    // アプリケーションに登録されている全てのイベントを削除し，実行中のアプリケーションの一覧から削除する
+    application.removeAllListeners();
+    delete this._runningApplications[applicationName];
+  }
+
+  _getApplicationPath(applicationName) {
+    return path.resolve(this._applicationDirectoryPath, applicationName);
+  }
+
+  _getRunningApplication(applicationName) {
+    if (!this._runningApplications.hasOwnProperty(applicationName)) {
+      return null;
+    }
+
+    return this._runningApplications[applicationName];
+  }
+
+  // Public methods
+
+  isReady() {
+    return this._hasCompletedWindowPreparation;
+  }
+
+  openApplication(applicationName) {
+    if (!this._hasCompletedWindowPreparation) {
+      errorLog("Not completed preparation");
+      return;
+    }
 
     if (applicationName === undefined) {
       errorLog("Application name invalid");
       return;
     }
 
-    const applicationPath = path.resolve(
-      __dirname,
-      "../applications/",
-      applicationName
-    );
-
-    // アプリケーションが存在するかどうかを確認する
-    if (!file.exists(applicationPath)) {
+    if (!this._existApplication(applicationName)) {
       errorLog(`Application (${applicationName}) is not found`);
       return;
     }
 
-    // アプリケーションが起動していないことを確認する
-    if (this.applications.hasOwnProperty(applicationName)) {
+    if (this._getRunningApplication(applicationName) !== null) {
       errorLog(`Application (${applicationName}) is already opened`);
-
-      // アプリケーションが存在する場合はアプリケーションに向けて open リクエストを送信する
-      this.applications[applicationName].emit("open");
-
       return;
     }
 
+    const applicationPath = this._getApplicationPath(applicationName);
+    const application = new Application({
+      name: applicationName,
+      path: applicationPath,
+      openApplication: this.openApplication.bind(this),
+      exitApplication: this.exitApplication.bind(this)
+    });
+
+    this._runningApplications[applicationName] = application;
+
+    // アプリケーションにイベントを登録する
+    application.addListener(
+      "exit",
+      this._exitApplication.bind(this, applicationName)
+    );
+
     try {
-      this.applications[applicationName] = new Application(this, {
-        name: applicationName,
-        currentDirectory: path.resolve(
-          __dirname,
-          `../applications/${applicationName}`
-        )
-      });
-
-      const self = this;
-
-      // アプリケーションから close が呼ばれたときに終了の処理を行う
-      this.applications[applicationName].on("close", function() {
-        delete self.applications[applicationName];
-      });
-
+      require(applicationPath)(application);
       log(`Application (${applicationName}) has been opened`);
-
-      // アプリケーション側から module.exports された関数を呼び出す
-      require(applicationPath)(this.applications[applicationName]);
-
-      // open イベントを送出する
-      // アプリケーションを立ち上げてすぐに終了した場合，このイベントが呼ばれる前にアプリケーション自体が終了している
-      // そのため emit の送る際はアプリケーションの存在確認をする
-      if (this.applications.hasOwnProperty(applicationName)) {
-        this.applications[applicationName].emit("open");
-      }
     } catch (error) {
-      delete this.applications[applicationName];
+      this._exitApplication(applicationName);
       errorLog(
         `Application (${applicationName}) structure is incorrect\n\tError: ${
           error.message
         }`
       );
+      return;
     }
+
+    return application;
   }
 
-  closeApplication(applicationName) {
+  exitApplication(applicationName) {
     if (applicationName === undefined) {
       errorLog("Application name invalid");
       return;
     }
 
-    const applicationPath = path.resolve(
-      __dirname,
-      "../applications/",
-      applicationName
-    );
-
-    // アプリケーションが存在するかどうかを確認する
-    if (!file.exists(applicationPath)) {
+    if (!this._existApplication(applicationName)) {
       errorLog(`Application (${applicationName}) is not found`);
       return;
     }
 
-    // アプリケーションが起動していることを確認する
-    if (!this.applications.hasOwnProperty(applicationName)) {
+    const application = this._getRunningApplication(applicationName);
+    if (application === null) {
       errorLog(`Application (${applicationName}) has not been opened`);
       return;
     }
 
+    application.exit();
+
     log(
       `A request has been sent to terminate application (${applicationName})`
     );
-
-    // Application クラスの close を呼び出した上で，Core の管理，this._applications から削除する
-    this.applications[applicationName].close();
-    delete this.applications[applicationName];
   }
 }
 

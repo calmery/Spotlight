@@ -130,11 +130,57 @@ function writeFile(filePath, content) {
   }
 }
 
+function getFiles(directoryPath) {
+  if (!path.isAbsolute(directoryPath)) {
+    return null;
+  }
+
+  const fileNames = [];
+  const fileOrDirectoryNames = fs.readdirSync(directoryPath);
+
+  fileOrDirectoryNames.forEach(function(fileOrDirectoryName) {
+    const fileOrDirectoryPath = path.resolve(
+      directoryPath,
+      fileOrDirectoryName
+    );
+
+    if (fs.statSync(fileOrDirectoryPath).isFile()) {
+      fileNames.push(fileOrDirectoryName);
+    }
+  });
+
+  return fileNames;
+}
+
+function getDirectories(directoryPath) {
+  if (!path.isAbsolute(directoryPath)) {
+    return null;
+  }
+
+  const directoryNames = [];
+  const fileOrDirectoryNames = fs.readdirSync(directoryPath);
+
+  fileOrDirectoryNames.forEach(function(fileOrDirectoryName) {
+    const fileOrDirectoryPath = path.resolve(
+      directoryPath,
+      fileOrDirectoryName
+    );
+
+    if (fs.statSync(fileOrDirectoryPath).isDirectory()) {
+      directoryNames.push(fileOrDirectoryName);
+    }
+  });
+
+  return directoryNames;
+}
+
 module.exports = {
   exists,
   makeDirectory,
   readFile,
   removeFile,
   removeDirectory,
-  writeFile
+  writeFile,
+  getFiles,
+  getDirectories
 };
