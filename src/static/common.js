@@ -7,9 +7,7 @@ function get(url, parameters) {
   }
 
   u.search = p.toString();
-  return fetch(u.toString()).then(function(response) {
-    return response.json();
-  });
+  return fetch(u.toString());
 }
 
 function post(url, parameters) {
@@ -20,7 +18,5 @@ function post(url, parameters) {
       "Content-Type": "application/json; charset=utf-8"
     },
     body: JSON.stringify(parameters)
-  }).then(function(response) {
-    return response.json();
   });
 }

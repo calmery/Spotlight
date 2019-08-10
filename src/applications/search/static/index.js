@@ -1,22 +1,3 @@
-function getJson(url, parameters) {
-  const u = new URL(`${window.location.origin}${url}`);
-  const p = new URLSearchParams();
-  Object.entries(parameters).map(([key, value]) => p.append(key, value));
-  u.search = p.toString();
-  return fetch(u.toString());
-}
-
-function postJson(url, json) {
-  return fetch(url, {
-    method: "POST",
-    cache: "no-cache",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8"
-    },
-    body: JSON.stringify(json)
-  });
-}
-
 let data = null;
 
 function renew() {
@@ -36,7 +17,7 @@ function save() {
     return;
   }
 
-  postJson("/save", data).then(function(response) {
+  post("/save", data).then(function(response) {
     if (response.status !== 200) {
       alert("保存に失敗しました");
       return;
@@ -54,7 +35,7 @@ function search() {
     return;
   }
 
-  getJson("/search", { query })
+  get("/search", { query })
     .catch(function() {
       alert("検索に失敗しました");
     })

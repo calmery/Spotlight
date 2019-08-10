@@ -10,12 +10,10 @@ function main(application) {
     response.status(200).end();
   });
 
-  const window = application.createWindow({
+  application.createFixedSizeWindow({
     width: 200,
     height: 600
   });
-  window.setMaximumSize(200, 600);
-  window.setMinimumSize(200, 600);
 }
 
 module.exports = main;

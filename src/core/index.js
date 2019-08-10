@@ -78,6 +78,7 @@ class Core extends Events {
 
     // アプリケーションに登録されている全てのイベントを削除し，実行中のアプリケーションの一覧から削除する
     application.removeAllListeners();
+    application.exit();
     delete this._runningApplications[applicationName];
   }
 
@@ -169,8 +170,7 @@ class Core extends Events {
       return;
     }
 
-    this._existApplication(applicationName);
-    application.exit();
+    this._exitApplication(applicationName);
 
     log(
       `A request has been sent to terminate application (${applicationName})`

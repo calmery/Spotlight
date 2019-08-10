@@ -1,5 +1,4 @@
 const crypto = require("crypto");
-const Twitter = require("twitter");
 
 function md5(string) {
   const md5 = crypto.createHash("md5");
@@ -16,8 +15,6 @@ function main(application) {
   } else {
     searchJson = JSON.parse(searchJson);
   }
-
-  // Routing
 
   // is_dangerous が更新されたデータを保存する
   application.post("/save", function(request, response) {
@@ -77,12 +74,10 @@ function main(application) {
       .end();
   });
 
-  const window = application.createWindow({
+  application.createFixedSizeWindow({
     width: 800,
     height: 600
   });
-  window.setMaximumSize(800, 600);
-  window.setMinimumSize(800, 600);
 }
 
 module.exports = main;
