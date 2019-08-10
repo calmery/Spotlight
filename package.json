@@ -1,6 +1,8 @@
 {
   "name": "spotlight",
   "version": "0.6.5",
+  "description": "Cyber Crime Prevention Volunteer",
+  "author": "Sojo University - Cyber Crime Prevention Volunteer",
   "engine": {
     "node": "10.16.1",
     "npm": "6.10.2"
