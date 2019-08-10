@@ -191,8 +191,8 @@ class Application extends Events {
     options.height = options.height || 600;
 
     const window = this.createWindow(options);
-    window.setMaximumSize(200, 600);
-    window.setMinimumSize(200, 600);
+    window.setMaximumSize(options.width, options.height);
+    window.setMinimumSize(options.width, options.height);
 
     return window;
   }
