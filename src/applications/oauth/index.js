@@ -29,7 +29,7 @@ function main(application) {
         consumerSecret: "hEesWDwCN6HTbkQ0YdIvgdHsgIhzEqcGwgKKtrerLbIz87BhS9",
         callbackURL: `${application.getUrl()}/callback`
       },
-      async function(accessToken, accessTokenSecret, user, done) {
+      function(accessToken, accessTokenSecret, user, done) {
         user.access_token = accessToken;
         user.access_token_secret = accessTokenSecret;
         user.authorized_at = new Date().toString();
@@ -39,8 +39,8 @@ function main(application) {
         );
         application.log("Authorized");
         // controller の起動を待機する必要がある
-        await application.openApplication("controller");
-        application.close();
+        application.openApplication("controller");
+        application.exit();
         return done(null, user);
       }
     )

@@ -17,16 +17,12 @@ function main(application) {
     process.exit(0);
   });
 
-  application.on("open", () => {
-    if (application.getWindowCount() === 0) {
-      const window = application.createWindow({
-        width: 800,
-        height: 600
-      });
-      window.setMaximumSize(800, 600);
-      window.setMinimumSize(800, 600);
-    }
+  const window = application.createWindow({
+    width: 800,
+    height: 600
   });
+  window.setMaximumSize(800, 600);
+  window.setMinimumSize(800, 600);
 }
 
 module.exports = main;

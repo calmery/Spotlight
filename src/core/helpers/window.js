@@ -18,7 +18,7 @@ function destory(main) {
 }
 
 // electron でウインドウが作成できるようになるまで待機する
-function wait() {
+function waitUntilReady() {
   return new Promise(function(resolve) {
     if (app.isReady()) {
       resolve();
@@ -34,5 +34,5 @@ function wait() {
 module.exports = {
   create,
   destory,
-  wait
+  waitUntilReady
 };

@@ -13,14 +13,14 @@ const STORAGE_PATH_DOCUMENTS = electron.app.getPath("documents");
 
 class Storage {
   constructor(prefix) {
-    this.prefix = prefix;
+    this._prefix = prefix;
   }
 
   _getPath(directoryPath, filePath) {
     return path.resolve(
       directoryPath,
       STORAGE_PREFIX,
-      this.prefix || "",
+      this._prefix || "",
       filePath
     );
   }
