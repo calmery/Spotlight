@@ -6,6 +6,9 @@ function create(options) {
   options = options || {};
   options.show = false;
 
+  options.webPreferences = options.webPreferences || {};
+  options.webPreferences.nodeIntegration = true;
+
   const window = new BrowserWindow(options);
 
   window.once("ready-to-show", function() {
