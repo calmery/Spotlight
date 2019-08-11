@@ -15,6 +15,6 @@ function removeAccount() {
     }
 
     require("electron").remote.app.relaunch();
-    require("electron").remote.app.exit(0)
+    require("electron").remote.app.exit(0);
   }
 }

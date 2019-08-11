@@ -12,7 +12,7 @@ passport.deserializeUser(function(user, done) {
 function oauth() {
   const x = application.openWindow();
   x.openDevTools();
-  x.loadURL(`http://${window.location.host}/oauth`)
+  x.loadURL(`http://${window.location.host}/oauth`);
 }
 
 function main() {
@@ -42,10 +42,7 @@ function main() {
         user.access_token = accessToken;
         user.access_token_secret = accessTokenSecret;
         user.authorized_at = new Date().toString();
-        application.saveAppData(
-          "authentication.json",
-          JSON.stringify(user)
-        );
+        application.saveAppData("authentication.json", JSON.stringify(user));
         // controller の起動を待機する必要がある
         const controller = application.openApplication("controller");
         controller.openWindow();
