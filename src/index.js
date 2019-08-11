@@ -1,7 +1,5 @@
-const Core = require("./core");
-const core = new Core();
+require("./controller");
 
-core.addListener("ready", function() {
-  const manager = core.openApplication("controller");
-  manager.openWindow().openDevTools();
+controller.waitUntilReady(function() {
+  controller.createWindow().openDevTools();
 });
