@@ -9,13 +9,18 @@ passport.deserializeUser(function(user, done) {
   return done(null, user);
 });
 
-function main(application) {
+function oauth() {
+  const x = application.openWindow();
+  x.openDevTools();
+  x.loadURL(`http://${window.location.host}/oauth`)
+}
+
+function main() {
   // Twitter Developers (https://developer.twitter.com/apps) で作成したアプリケーションではコールバック URL を指定する必要があるため
   // Reference: https://developer.twitter.com/en/docs/basics/apps/guides/callback-urls
-  application.setPort(60321);
-  application.use(passport.initialize());
-  application.use(passport.session());
-  application.use(
+  application._serverManager.use(passport.initialize());
+  application._serverManager.use(passport.session());
+  application._serverManager.use(
     expressSession({
       secret: "spotlight",
       resave: true,
@@ -37,31 +42,26 @@ function main(application) {
         user.access_token = accessToken;
         user.access_token_secret = accessTokenSecret;
         user.authorized_at = new Date().toString();
-        application.saveSharedAppData(
+        application.saveAppData(
           "authentication.json",
           JSON.stringify(user)
         );
-        application.log("Authorized");
         // controller の起動を待機する必要がある
-        application.openApplication("controller");
-        application.exit();
+        const controller = application.openApplication("controller");
+        controller.openWindow();
+        application.close();
         return done(null, user);
       }
     )
   );
 
-  application.get("/oauth", passport.authenticate("twitter"));
-  application.get(
+  application._serverManager.get("/oauth", passport.authenticate("twitter"));
+  application._serverManager.get(
     "/callback",
     passport.authenticate("twitter", {
       failureRedirect: "/"
     })
   );
-
-  application.createFixedSizeWindow({
-    width: 800,
-    height: 600
-  });
 }
 
-module.exports = main;
+main();

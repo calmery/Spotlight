@@ -1,3 +1,4 @@
+
 const colors = require("colors/safe");
 
 function log(type, name, message) {
@@ -12,6 +13,4 @@ function log(type, name, message) {
   console.log(time, name, "-", message);
 }
 
-module.exports = {
-  log
-};
+module.exports = {log};

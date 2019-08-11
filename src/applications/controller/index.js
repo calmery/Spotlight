@@ -1,19 +1,9 @@
-function main(application) {
-  if (application.loadSharedAppData("authentication.json") === null) {
-    application.openApplication("oauth");
-    application.exit();
-    return;
-  }
-
-  application.post("/open", function(request, response) {
-    application.openApplication(request.body.name);
-    response.status(200).end();
-  });
-
-  application.createFixedSizeWindow({
-    width: 200,
-    height: 600
-  });
+if (application.loadAppData("authentication.json") === null) {
+  const oauth = application.openApplication("oauth", 60321);
+  oauth.openWindow().openDevTools();
+  application.close();
 }
 
-module.exports = main;
+function openApplication(name) {
+  application.openApplication(name);
+}
