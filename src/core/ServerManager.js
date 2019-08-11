@@ -1,13 +1,35 @@
+const cors = require("cors");
 const express = require("express");
-const bodyParser = require("body-parser");
 
-class Server {
+// Server Manager
+
+class ServerManager {
   constructor(port) {
     this._express = express();
-    this._express.use(bodyParser.json({ limit: "100mb" }));
     this._server = this._express.listen(port);
     this._port = this._server.address().port;
+    this._express.use(cors());
   }
+
+  // Public
+
+  close() {
+    this._server.close();
+  }
+
+  getHost() {
+    return `127.0.0.1:${this.getPort()}`;
+  }
+
+  getPort() {
+    return this._port;
+  }
+
+  getUrl() {
+    return `http://${this.getHost()}`;
+  }
+
+  // Routing
 
   use(...args) {
     return this._express.use(...args);
@@ -15,6 +37,7 @@ class Server {
 
   // app.get(route, function)
   get(...args) {
+    console.log("Get")
     return this._express.get(...args);
   }
 
@@ -32,22 +55,8 @@ class Server {
   delete(...args) {
     return this._express.delete(...args);
   }
-
-  getHost() {
-    return `127.0.0.1:${this.getPort()}`;
-  }
-
-  getPort() {
-    return this._port;
-  }
-
-  getUrl() {
-    return `http://${this.getHost()}`;
-  }
-
-  close() {
-    this._server.close();
-  }
 }
 
-module.exports = Server;
+// Exports
+
+module.exports = ServerManager;
