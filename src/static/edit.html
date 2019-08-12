@@ -1,63 +1,41 @@
 <html>
   <head>
-    <title>編集</title>
+    <title>Edit</title>
     <link rel="stylesheet" href="common.css" />
   </head>
 
-  <body id="_application">
-    <section class="_sidebar _logo_space_required">
+  <body>
+    <section id="_sidebar">
       <div class="_label">
+        Spotlight
+      </div>
+
+      <div class="_menu _active">
         <div class="_text">
-          Edit
+          編集
+          <div class="_description">Edit</div>
         </div>
       </div>
 
-      <nav class="_navigator">
-        <div class="_menu _active">
-          <div class="_text">
-            編集
-            <div class="_description">Edit</div>
-          </div>
-        </div>
-      </nav>
-
       <div class="_label">
-        <div class="_text">
-          Menu
-        </div>
-      </div>
-
-      <nav class="_navigator">
-        <div class="_menu" onclick="save()">
-          <div class="_text">
-            保存
-            <div class="_description">Save</div>
-          </div>
-        </div>
-      </nav>
-
-      <div class="_label">
-        <div class="_text">
-          ファイル一覧
-        </div>
+        ファイル一覧
       </div>
 
       <div id="files"></div>
-    </section>
 
-    <section class="_logo">
-      <div class="_icon"></div>
-      <div class="_name">Spotlight</div>
-      <div class="_id">
-        Cyber Crime Prevention Volunteer
+      <div class="_logo">
+        <div class="_icon"></div>
+        <div class="_name">Spotlight</div>
+        <div class="_description">
+          Cyber Crime Prevention Volunteer
+        </div>
       </div>
     </section>
 
-    <section class="_main">
-      <div id="output" class="_hide"></div>
+    <section id="_main">
+      <div id="output"></div>
     </section>
 
-    <script src="common.js"></script>
     <script src="edit.js"></script>
   </body>
 </html>
