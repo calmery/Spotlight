@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 
+// ファイル名を生成するために使用する
 function md5(string) {
   const md5 = crypto.createHash("md5");
   return md5.update(JSON.stringify(string), "binary").digest("hex");
@@ -74,30 +75,24 @@ function toggle(id) {
   }
 }
 
-function main() {
-  let searchJson = controller.loadDocuments("search.json");
+let searchJson = controller.loadDocuments("search.json");
 
-  // 検索結果を保存したファイルのリストを search.json に保存するため存在しなければあらかじめ作成する
-  if (searchJson === null) {
-    controller.saveDocuments("search.json", JSON.stringify({}));
-    searchJson = {};
-  } else {
-    searchJson = JSON.parse(searchJson);
-  }
-
-  renderFiles(searchJson);
+// 検索結果を保存したファイルのリストを search.json に保存するため存在しなければあらかじめ作成する
+if (searchJson === null) {
+  controller.saveDocuments("search.json", JSON.stringify({}));
+  searchJson = {};
+} else {
+  searchJson = JSON.parse(searchJson);
 }
 
-function renderFiles(files) {
-  const element = document.getElementById("files");
+const element = document.getElementById("files");
+element.innerHTML = "";
 
-  element.innerHTML = "";
+Object.entries(searchJson).forEach(function(data) {
+  const fileName = data[0] + ".json";
+  const query = decodeURIComponent(data[1]);
 
-  Object.entries(files).forEach(function(data) {
-    const fileName = data[0] + ".json";
-    const query = decodeURIComponent(data[1]);
-
-    element.innerHTML += `
+  element.innerHTML += `
       <nav class="_navigator">
         <div class="_menu file" id="f-${data[0]}" onclick="load('${data[0]}')">
           <div class="_text">
@@ -107,14 +102,11 @@ function renderFiles(files) {
         </div>
       </nav>
     `;
-  });
-}
-
-main();
+});
 
 // Render Functions
 
-// ツイートを取得した後にこの関数が実行する
+// ツイートを取得した後にこの関数が実行され，HTML が生成される
 function render(tweets) {
   const output = document.getElementById("output");
   const { statuses } = tweets;

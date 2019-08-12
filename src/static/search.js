@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const Twitter = require("twitter");
 
+// ファイル名を生成するために使用する
 function md5(string) {
   const md5 = crypto.createHash("md5");
   return md5.update(JSON.stringify(string), "binary").digest("hex");
@@ -16,6 +17,7 @@ const authenticationJson = JSON.parse(
   controller.loadAppData("authentication.json")
 );
 
+// Reference: https://www.npmjs.com/package/twitter
 const twitter = new Twitter({
   consumer_key: "nDnk9b8WsPVE5hLoY44qNSevM",
   consumer_secret: "hEesWDwCN6HTbkQ0YdIvgdHsgIhzEqcGwgKKtrerLbIz87BhS9",
@@ -23,6 +25,7 @@ const twitter = new Twitter({
   access_token_secret: authenticationJson.access_token_secret
 });
 
+// 描写，編集するツイートのデータを格納する
 let data = null;
 
 function renew() {
@@ -104,7 +107,7 @@ function toggle(id) {
 
 // Render Functions
 
-// ツイートを取得した後にこの関数が実行する
+// ツイートを取得した後にこの関数が実行され，HTML が生成される
 function render(tweets) {
   const output = document.getElementById("output");
   const { statuses } = tweets;
