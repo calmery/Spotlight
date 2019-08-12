@@ -7,13 +7,13 @@ const electronBuilder = require("electron-builder");
 const build = electronBuilder.build;
 const Platform = electronBuilder.Platform;
 
-// NOTE: https://www.electron.build/configuration/win
+// Reference: https://www.electron.build/configuration/win
 function buildForWindows() {
   return build({
     targets: Platform.WINDOWS.createTarget("nsis", electronBuilder.Arch.ia32),
     config: {
       productName: "Spotlight",
-      // NOTE: GitHub Releases に登録しないようにする
+      // GitHub Releases に登録しないようにする
       publish: null,
       directories: {
         app: path.resolve(__dirname, ".."),
@@ -24,19 +24,19 @@ function buildForWindows() {
   });
 }
 
-// NOTE: https://www.electron.build/configuration/mac
+// Reference: https://www.electron.build/configuration/mac
 function buildForMacOS() {
   return build({
     targets: Platform.MAC.createTarget(),
     config: {
       productName: "Spotlight",
-      // NOTE: GitHub Releases に登録しないようにする
+      // GitHub Releases に登録しないようにする
       publish: null,
       directories: {
         app: path.resolve(__dirname, ".."),
         output: path.resolve(__dirname, "../build/osx")
       },
-      // NOTE: http://www.img2icnsapp.com/
+      // Reference: http://www.img2icnsapp.com/
       icon: path.resolve(__dirname, "../src/static/icon.icns")
     }
   });
