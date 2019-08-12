@@ -100,18 +100,6 @@ function removeFile(filePath) {
   }
 }
 
-function save(directoryPath, filePath, body) {
-  return saveFile(getPathWithPrefix(directoryPath, filePath), body);
-}
-
-function load(directoryPath, filePath) {
-  return loadFile(getPathWithPrefix(directoryPath, filePath));
-}
-
-function remove(directoryPath, filePath) {
-  return removeFile(getPathWithPrefix(directoryPath, filePath));
-}
-
 // Constants
 
 // Reference: https://github.com/electron/electron/blob/master/docs/api/app.md#appgetpathname
@@ -121,29 +109,29 @@ const STORAGE_PATH_DOCUMENTS = electron.app.getPath("documents");
 // AppData
 
 function saveAppData(filePath, body) {
-  return save(STORAGE_PATH_APP_DATA, filePath, body);
+  return saveFile(getPathWithPrefix(STORAGE_PATH_APP_DATA, filePath), body);
 }
 
 function loadAppData(filePath) {
-  return load(STORAGE_PATH_APP_DATA, filePath);
+  return loadFile(getPathWithPrefix(STORAGE_PATH_APP_DATA, filePath));
 }
 
 function removeAppData(filePath) {
-  return remove(STORAGE_PATH_APP_DATA, filePath);
+  return removeFile(getPathWithPrefix(STORAGE_PATH_APP_DATA, filePath));
 }
 
 // Documents
 
 function saveDocuments(filePath, body) {
-  return save(STORAGE_PATH_DOCUMENTS, filePath, body);
+  return saveFile(getPathWithPrefix(STORAGE_PATH_DOCUMENTS, filePath), body);
 }
 
 function loadDocuments(filePath) {
-  return load(STORAGE_PATH_DOCUMENTS, filePath);
+  return loadFile(getPathWithPrefix(STORAGE_PATH_DOCUMENTS, filePath));
 }
 
 function removeDocuments(filePath) {
-  return remove(STORAGE_PATH_DOCUMENTS, filePath);
+  return removeFile(getPathWithPrefix(STORAGE_PATH_DOCUMENTS, filePath));
 }
 
 module.exports = {
