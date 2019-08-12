@@ -5,16 +5,6 @@ function md5(string) {
   return md5.update(JSON.stringify(string), "binary").digest("hex");
 }
 
-let searchJson = controller.loadDocuments("search.json");
-
-// 検索結果を保存したファイルのリストを search.json に保存するため存在しなければあらかじめ作成する
-if (searchJson === null) {
-  controller.saveDocuments("search.json", JSON.stringify({}));
-  searchJson = {};
-} else {
-  searchJson = JSON.parse(searchJson);
-}
-
 let data = null;
 
 function load(name) {
@@ -50,30 +40,6 @@ function load(name) {
   render(data);
 }
 
-function renderFiles(files) {
-  const element = document.getElementById("files");
-
-  element.innerHTML = "";
-
-  Object.entries(files).forEach(function(data) {
-    const fileName = data[0] + ".json";
-    const query = decodeURIComponent(data[1]);
-
-    element.innerHTML += `
-      <nav class="_navigator">
-        <div class="_menu file" id="f-${data[0]}" onclick="load('${data[0]}')">
-          <div class="_text">
-            ${query}
-            <div class="_description">${fileName}</div>
-          </div>
-        </div>
-      </nav>
-    `;
-  });
-}
-
-renderFiles(searchJson);
-
 // is_dangerous が更新されたデータを保存する
 function save() {
   if (data === null) {
@@ -108,9 +74,47 @@ function toggle(id) {
   }
 }
 
+function main() {
+  let searchJson = controller.loadDocuments("search.json");
+
+  // 検索結果を保存したファイルのリストを search.json に保存するため存在しなければあらかじめ作成する
+  if (searchJson === null) {
+    controller.saveDocuments("search.json", JSON.stringify({}));
+    searchJson = {};
+  } else {
+    searchJson = JSON.parse(searchJson);
+  }
+
+  renderFiles(searchJson);
+}
+
+function renderFiles(files) {
+  const element = document.getElementById("files");
+
+  element.innerHTML = "";
+
+  Object.entries(files).forEach(function(data) {
+    const fileName = data[0] + ".json";
+    const query = decodeURIComponent(data[1]);
+
+    element.innerHTML += `
+      <nav class="_navigator">
+        <div class="_menu file" id="f-${data[0]}" onclick="load('${data[0]}')">
+          <div class="_text">
+            ${query}
+            <div class="_description">${fileName}</div>
+          </div>
+        </div>
+      </nav>
+    `;
+  });
+}
+
+main();
+
 // Render Functions
 
-// ツイートを取得した後にこの関数が実行される
+// ツイートを取得した後にこの関数が実行する
 function render(tweets) {
   const output = document.getElementById("output");
   const { statuses } = tweets;

@@ -104,7 +104,7 @@ function toggle(id) {
 
 // Render Functions
 
-// ツイートを取得した後にこの関数が実行される
+// ツイートを取得した後にこの関数が実行する
 function render(tweets) {
   const output = document.getElementById("output");
   const { statuses } = tweets;

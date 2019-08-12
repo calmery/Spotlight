@@ -1,49 +1,44 @@
 <html>
   <head>
     <title>Spotlight</title>
-    <link href="common.css" rel="stylesheet" />
+    <link rel="stylesheet" href="common.css" />
+    <script src="controller.js"></script>
   </head>
 
-  <body id="_application">
-    <section class="_sidebar _logo_space_required">
+  <body>
+    <section id="_sidebar">
       <div class="_label">
+        Spotlight
+      </div>
+
+      <div class="_menu" onclick="createWindow('search')">
         <div class="_text">
-          Spotlight
+          検索
+          <div class="_description">Search</div>
         </div>
       </div>
 
-      <nav class="_navigator">
-        <div class="_menu" onclick="createWindow('search')">
-          <div class="_text">
-            検索
-            <div class="_description">Search</div>
-          </div>
+      <div class="_menu" onclick="createWindow('edit')">
+        <div class="_text">
+          編集
+          <div class="_description">Edit</div>
         </div>
+      </div>
 
-        <div class="_menu" onclick="createWindow('edit')">
-          <div class="_text">
-            編集
-            <div class="_description">Edit</div>
-          </div>
+      <div class="_menu" onclick="createWindow('setting')">
+        <div class="_text">
+          設定
+          <div class="_description">Setting</div>
         </div>
+      </div>
 
-        <div class="_menu" onclick="createWindow('setting')">
-          <div class="_text">
-            設定
-            <div class="_description">Setting</div>
-          </div>
+      <div class="_logo">
+        <div class="_icon"></div>
+        <div class="_name">Spotlight</div>
+        <div class="_description">
+          Cyber Crime Prevention Volunteer
         </div>
-      </nav>
-    </section>
-
-    <section class="_logo">
-      <div class="_icon"></div>
-      <div class="_name">Spotlight</div>
-      <div class="_id">
-        Cyber Crime Prevention Volunteer
       </div>
     </section>
-
-    <script src="controller.js"></script>
   </body>
 </html>

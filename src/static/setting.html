@@ -1,52 +1,49 @@
 <html>
   <head>
-    <title>設定</title>
+    <title>Spotlight</title>
     <link rel="stylesheet" href="common.css" />
+    <script src="setting.js"></script>
   </head>
 
-  <body id="_application">
-    <section class="_sidebar _logo_space_required">
+  <body>
+    <section id="_sidebar">
       <div class="_label">
+        Spotlight
+      </div>
+
+      <div class="_menu _active">
         <div class="_text">
-          Spotlight
+          設定
+          <div class="_description">Setting</div>
         </div>
       </div>
 
-      <nav class="_navigator">
-        <div class="_menu _active">
-          <div class="_text">
-            設定
-            <div class="_description">Setting</div>
+      <div class="_logo">
+        <div class="_icon"></div>
+        <div class="_name">Spotlight</div>
+        <div class="_description">
+          Cyber Crime Prevention Volunteer
+        </div>
+      </div>
+    </section>
+
+    <section id="_main">
+      <div class="_content">
+        <div class="_flex_space_between">
+          <div class="_label">
+            Twitter の認証情報を削除する
+            <div class="_value">
+              このアプリケーションに保存されている Twitter
+              の認証情報，検索データを削除します
+            </div>
+          </div>
+          <div>
+            <div onclick="removeAllData()" class="_button _background_danger">
+              削除
+            </div>
           </div>
         </div>
-      </nav>
-    </section>
-
-    <section class="_logo">
-      <div class="_icon"></div>
-      <div class="_name">Spotlight</div>
-      <div class="_id">
-        Cyber Crime Prevention Volunteer
       </div>
     </section>
-
-    <section class="_main">
-      <div class="_content clearfix">
-        <div class="float_l">
-          Twitter の認証情報を削除する
-          <div class="_value">
-            このアプリケーションに保存されている Twitter
-            の認証情報，検索データを削除します
-          </div>
-        </div>
-        <div class="float_r">
-          <span class="_button _background_danger" onclick="removeAccount()"
-            >削除</span
-          >
-        </div>
-      </div>
-    </section>
-
-    <script src="setting.js"></script>
   </body>
 </html>

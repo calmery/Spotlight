@@ -1,68 +1,57 @@
 <html>
   <head>
-    <title>検索</title>
+    <title>Edit</title>
     <link rel="stylesheet" href="common.css" />
   </head>
 
-  <body id="_application">
-    <section class="_sidebar _logo_space_required">
+  <body>
+    <section id="_sidebar">
       <div class="_label">
+        Spotlight
+      </div>
+
+      <div class="_menu _active">
         <div class="_text">
-          Search
+          検索
+          <div class="_description">Search</div>
         </div>
       </div>
 
-      <nav class="_navigator">
-        <div class="_menu _active">
-          <div class="_text">
-            検索
-            <div class="_description">Search</div>
-          </div>
-        </div>
-      </nav>
-
       <div class="_label">
+        Menu
+      </div>
+
+      <div class="_menu" onclick="renew()">
         <div class="_text">
-          Menu
+          新規検索
+          <div class="_description">New</div>
         </div>
       </div>
 
-      <nav class="_navigator">
-        <div class="_menu" onclick="renew()">
-          <div class="_text">
-            新規検索
-            <div class="_description">New</div>
-          </div>
+      <div class="_menu" onclick="save()">
+        <div class="_text">
+          保存
+          <div class="_description">Save</div>
         </div>
-      </nav>
+      </div>
 
-      <nav class="_navigator">
-        <div class="_menu" onclick="save()">
-          <div class="_text">
-            保存
-            <div class="_description">Save</div>
-          </div>
+      <div class="_logo">
+        <div class="_icon"></div>
+        <div class="_name">Spotlight</div>
+        <div class="_description">
+          Cyber Crime Prevention Volunteer
         </div>
-      </nav>
-    </section>
-
-    <section class="_logo">
-      <div class="_icon"></div>
-      <div class="_name">Spotlight</div>
-      <div class="_id">
-        Cyber Crime Prevention Volunteer
       </div>
     </section>
 
-    <section class="_main">
+    <section id="_main">
       <div class="_content" id="search_field">
         <textarea
           id="query"
           class="_input"
           placeholder="検索ワードを入力"
         ></textarea>
-        <br />
-        <span class="_button _background_primary" onclick="search()">検索</span>
+        <div class="_button _background_primary" onclick="search()">検索</div>
       </div>
 
       <div id="output" class="_hide"></div>
