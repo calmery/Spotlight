@@ -44,5 +44,5 @@ global.controller = {
   saveDocuments: storage.saveDocuments,
   loadDocuments: storage.loadDocuments,
   removeDocuments: storage.removeDocuments,
-  waitUntilReady: window.waitUntilReady
+  ready: window.ready
 };

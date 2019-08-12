@@ -1,19 +1,6 @@
 const electron = require("electron");
 const path = require("path");
 
-function waitUntilReady(callback) {
-  const app = electron.app;
-
-  if (app.isReady()) {
-    callback();
-    return;
-  }
-
-  app.on("ready", function() {
-    callback();
-  });
-}
-
 function overrideOptions(options) {
   if (options === undefined) {
     options = {};
@@ -50,8 +37,21 @@ function destroy(window) {
   }
 }
 
+function ready(callback) {
+  const app = electron.app;
+
+  if (app.isReady()) {
+    callback();
+    return;
+  }
+
+  app.on("ready", function() {
+    callback();
+  });
+}
+
 module.exports = {
   create,
   destroy,
-  waitUntilReady
+  ready
 };
