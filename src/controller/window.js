@@ -1,6 +1,7 @@
 const electron = require("electron");
 const path = require("path");
 
+// Reference: https://electronjs.org/docs/api/browser-window#class-browserwindow
 function overrideOptions(options) {
   if (options === undefined) {
     options = {};

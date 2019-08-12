@@ -1,5 +1,3 @@
-const electron = require("electron").remote;
-
 function removeAllData() {
   if (confirm("認証情報，検索データを削除してアプリケーションを終了します")) {
     controller.removeAppData("authentication.json");

@@ -2,8 +2,6 @@ const electron = require("electron");
 const fs = require("fs");
 const path = require("path");
 
-// Helper Functions
-
 // ファイル，またディレクトリの存在を確認する
 function exists(filePath) {
   if (!path.isAbsolute(filePath)) {
