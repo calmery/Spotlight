@@ -3,10 +3,6 @@
   "version": "1.0.2",
   "description": "Cyber Crime Prevention Volunteer",
   "author": "Sojo University - Cyber Crime Prevention Volunteer",
-  "engine": {
-    "node": "10.16.1",
-    "npm": "6.10.2"
-  },
   "dependencies": {
     "colors": "1.3.3",
     "cors": "2.8.5",
