@@ -19,12 +19,6 @@ function createWindow(url, options) {
     url = getUrl();
   }
 
-  // `url` が省略された場合は引数 `url` に引数 `options` の内容が入っているので `url` の内容を `options` にコピーし，`url` は `getUrl()` 関数の結果にする
-  if (typeof url === "object") {
-    options = url;
-    url = getUrl();
-  }
-
   // 指定された URL が相対パスの場合，`getUrl()` 関数で得られる URL と連結する
   // createWindow("controller.html") の場合は `http://127.0.0.1:生成されたポート番号/controller.html` となる
   return window.create(new URL(url, getUrl()).href, options);
