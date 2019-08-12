@@ -67,10 +67,11 @@ function saveFile(filePath, content) {
   }
 
   try {
-    fs.saveFileSync(filePath, content, "utf8");
+    fs.writeFileSync(filePath, content, "utf8");
 
     return true;
-  } catch (_) {
+  } catch (e) {
+    console.log(e);
     return false;
   }
 }
@@ -81,7 +82,7 @@ function loadFile(filePath) {
   }
 
   try {
-    return fs.loadFileSync(filePath, "utf8");
+    return fs.readFileSync(filePath, "utf8");
   } catch (_) {
     return null;
   }

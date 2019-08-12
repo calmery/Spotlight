@@ -313,6 +313,13 @@ body#_application::-webkit-scrollbar {
   margin-right: 5px;
 }
 
+._main ._content._tweet ._profile ._icon img {
+  width: 41px;
+  height: 41px;
+  border-radius: 100%;
+  border: 2px solid rgba(235, 235, 235, 1);
+}
+
 ._main ._content._tweet ._profile ._screen_name,
 ._main ._content._tweet ._profile ._id {
   font-size: 10px;

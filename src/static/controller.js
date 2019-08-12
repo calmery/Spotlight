@@ -1,3 +1,3 @@
-function openApplication(name) {
-  controller.createWindow().loadURL(`${controller.getUrl()}/${name}.html`);
+function createWindow(name) {
+  controller.createWindow(`${name}.html`);
 }

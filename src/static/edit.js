@@ -1,3 +1,113 @@
+const crypto = require("crypto");
+
+function md5(string) {
+  const md5 = crypto.createHash("md5");
+  return md5.update(JSON.stringify(string), "binary").digest("hex");
+}
+
+let searchJson = controller.loadDocuments("search.json");
+
+// 検索結果を保存したファイルのリストを search.json に保存するため存在しなければあらかじめ作成する
+if (searchJson === null) {
+  controller.saveDocuments("search.json", JSON.stringify({}));
+  searchJson = {};
+} else {
+  searchJson = JSON.parse(searchJson);
+}
+
+let data = null;
+
+function load(name) {
+  if (data !== null && !confirm("保存されていないデータは失われます")) {
+    return;
+  }
+
+  const menus = document.querySelectorAll(".file");
+
+  for (let i = 0; i < menus.length; i++) {
+    menus[i].className = "_menu file";
+  }
+
+  document.getElementById("output").innerHTML = "";
+  data = null;
+
+  const tweets = controller.loadDocuments(`${name}.json`);
+
+  // ファイルが見つからない
+  if (tweets === null) {
+    alert("ファイルが見つかりません");
+    // search.json に含まれている場合，データにズレが発生しているので search.json を更新する
+    if (searchJson.hasOwnProperty(name)) {
+      delete searchJson[name];
+      controller.saveDocuments("search.json", JSON.stringify(searchJson));
+    }
+
+    return;
+  }
+
+  data = JSON.parse(tweets);
+
+  render(data);
+}
+
+function renderFiles(files) {
+  const element = document.getElementById("files");
+
+  element.innerHTML = "";
+
+  Object.entries(files).forEach(function(data) {
+    const fileName = data[0] + ".json";
+    const query = decodeURIComponent(data[1]);
+
+    element.innerHTML += `
+      <nav class="_navigator">
+        <div class="_menu file" id="f-${data[0]}" onclick="load('${data[0]}')">
+          <div class="_text">
+            ${query}
+            <div class="_description">${fileName}</div>
+          </div>
+        </div>
+      </nav>
+    `;
+  });
+}
+
+renderFiles(searchJson);
+
+// is_dangerous が更新されたデータを保存する
+function save() {
+  if (data === null) {
+    alert("検索データが存在しません");
+    return;
+  }
+
+  const tweets = data;
+  const name = md5(JSON.stringify(tweets.search_metadata));
+  controller.saveDocuments(`${name}.json`, JSON.stringify(tweets));
+
+  // search.json の内容を更新する
+  const searchJson = JSON.parse(controller.loadDocuments("search.json"));
+  searchJson[name] = tweets.search_metadata.query;
+  controller.saveDocuments("search.json", JSON.stringify(searchJson));
+
+  alert("保存しました");
+}
+
+function toggle(id) {
+  const element = document.getElementById(`t-${id}`);
+  const index = parseInt(element.getAttribute("data-index"), 10);
+
+  if (element.getAttribute("data-is-dangerous") === "true") {
+    element.className = "_content _tweet _safe";
+    element.setAttribute("data-is-dangerous", "false");
+    data.statuses[index].is_dangerous = false;
+  } else {
+    element.className = "_content _tweet";
+    element.setAttribute("data-is-dangerous", "true");
+    data.statuses[index].is_dangerous = true;
+  }
+}
+
 // Render Functions
 
 // ツイートを取得した後にこの関数が実行される

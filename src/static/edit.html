@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>検索</title>
+    <title>編集</title>
     <link rel="stylesheet" href="common.css" />
   </head>
 
@@ -8,15 +8,15 @@
     <section class="_sidebar _logo_space_required">
       <div class="_label">
         <div class="_text">
-          Search
+          Edit
         </div>
       </div>
 
       <nav class="_navigator">
         <div class="_menu _active">
           <div class="_text">
-            検索
-            <div class="_description">Search</div>
+            編集
+            <div class="_description">Edit</div>
           </div>
         </div>
       </nav>
@@ -28,15 +28,6 @@
       </div>
 
       <nav class="_navigator">
-        <div class="_menu" onclick="renew()">
-          <div class="_text">
-            新規検索
-            <div class="_description">New</div>
-          </div>
-        </div>
-      </nav>
-
-      <nav class="_navigator">
         <div class="_menu" onclick="save()">
           <div class="_text">
             保存
@@ -44,6 +35,14 @@
           </div>
         </div>
       </nav>
+
+      <div class="_label">
+        <div class="_text">
+          ファイル一覧
+        </div>
+      </div>
+
+      <div id="files"></div>
     </section>
 
     <section class="_logo">
@@ -55,21 +54,10 @@
     </section>
 
     <section class="_main">
-      <div class="_content" id="search_field">
-        <textarea
-          id="query"
-          class="_input"
-          placeholder="検索ワードを入力"
-        ></textarea>
-        <br />
-        <span class="_button _background_primary" onclick="search()">検索</span>
-      </div>
-
       <div id="output" class="_hide"></div>
     </section>
 
     <script src="common.js"></script>
-    <script src="index.js"></script>
-    <script src="render.js"></script>
+    <script src="edit.js"></script>
   </body>
 </html>

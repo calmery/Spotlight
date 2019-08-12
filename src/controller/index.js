@@ -1,3 +1,4 @@
+const electron = require("electron");
 const express = require("express");
 const path = require("path");
 const createServer = require("./server").create;
@@ -24,8 +25,13 @@ function createWindow(url, options) {
   return window.create(new URL(url, getUrl()).href, options);
 }
 
+function restart() {
+  electron.app.relaunch();
+  close();
+}
+
 function close() {
-  process.exit(0);
+  electron.app.exit(0);
 }
 
 function getUrl() {
@@ -36,6 +42,7 @@ function getUrl() {
 global.controller = {
   createWindow: createWindow,
   destroyWindow: window.destroy,
+  restart: restart,
   close: close,
   getUrl: getUrl,
   saveAppData: storage.saveAppData,
