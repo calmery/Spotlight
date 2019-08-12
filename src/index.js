@@ -1,5 +1,5 @@
 require("./controller");
 
 controller.waitUntilReady(function() {
-  controller.createWindow().openDevTools();
+  controller.createWindow("controller.html").openDevTools();
 });
