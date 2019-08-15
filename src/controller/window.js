@@ -28,6 +28,7 @@ function create(url, options) {
   });
 
   window.loadURL(url);
+  window.setMenu(null);
 
   return window;
 }
