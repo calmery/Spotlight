@@ -20,6 +20,6 @@
   "main": "src",
   "scripts": {
     "start": "electron .",
-    "build": "rimraf release && node scripts/build"
+    "build": "rimraf build && node scripts/build"
   }
 }
