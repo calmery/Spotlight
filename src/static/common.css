@@ -226,14 +226,23 @@ img {
   padding: 10px;
 }
 
+#_main ._content._tweet ._tag_group > div {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+#_main ._content._tweet ._tag_group > div:last-child {
+  margin-bottom: 0;
+}
+
 #_main ._content._tweet ._tag_group ._tag {
   padding: 5px 10px;
   color: rgba(255, 255, 255, 1);
   font-size: 10px;
   background: rgba(2, 159, 218, 1);
-  margin-right: 5px;
+  margin-right: 4px;
   border-radius: 4px;
-  line-height: 25px;
+  white-space: pre-wrap;
 }
 
 #_main ._content._tweet._safe {

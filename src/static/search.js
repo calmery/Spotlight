@@ -224,7 +224,7 @@ function renderEntities(entities) {
   }
 
   return `
-    <div class="_column _tag_group">
+    <div class="_tag_group">
       ${renderUserMentions(entities.user_mentions)}
       ${renderHashTags(entities.hashtags)}
       ${renderUrls(entities.urls)}
@@ -239,17 +239,11 @@ function renderUserMentions(userMentions) {
 
   return `
     <div>
-      <div class="_column">
-        ${userMentions
-          .map(function(userMention) {
-            return `
-            <span class="_tag _background_primary">
-            <span class="_font_condense">ë</span> @${userMention.screen_name}
-            </span>
-          `;
-          })
-          .join("")}
-      </div>
+      ${userMentions
+        .map(function(userMention) {
+          return `<div class="_tag _background_primary"><span class="_font_condense">ë</span> @${userMention.screen_name}</div>`;
+        })
+        .join("")}
     </div>
   `;
 }
@@ -261,17 +255,11 @@ function renderHashTags(hashTags) {
 
   return `
     <div>
-      <div class="_column">
-        ${hashTags
-          .map(function(hashTag) {
-            return `
-            <span class="_tag _background_primary">
-              <span class="_font_condense">a</span> ${hashTag.text}
-            </span>
-          `;
-          })
-          .join("")}
-      </div>
+      ${hashTags
+        .map(function(hashTag) {
+          return `<div class="_tag _background_primary"><span class="_font_condense">a</span> ${hashTag.text}</div>`;
+        })
+        .join("")}
     </div>
   `;
 }
@@ -283,17 +271,11 @@ function renderUrls(urls) {
 
   return `
     <div>
-      <div class="_column">
-        ${urls
-          .map(function(url) {
-            return `
-            <span class="_tag _background_primary">
-              <span class="_font_condense">Y</span> ${url.url}
-            </span>
-          `;
-          })
-          .join("")}
-      </div>
+      ${urls
+        .map(function(url) {
+          return `<div class="_tag _background_primary"><span class="_font_condense">Y</span> ${url.url}</div>`;
+        })
+        .join("")}
     </div>
   `;
 }
