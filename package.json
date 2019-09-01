@@ -18,8 +18,34 @@
     "rimraf": "2.6.3"
   },
   "main": "src",
+  "build": {
+    "appId": "jp.ac.sojo-u.cis.spotlight",
+    "directories": {
+      "buildResources": "src",
+      "output": "build"
+    },
+    "files": [
+      "src",
+      "package.json",
+      "package-lock.json"
+    ],
+    "mac": {
+      "category": "public.app-category.business",
+      "icon": "src/static/icon.icns",
+      "target": "zip"
+    },
+    "win": {
+      "icon": "src/static/icon.icns",
+      "target": {
+        "arch": "ia32",
+        "target": "nsis"
+      }
+    },
+    "productName": "Spotlight",
+    "publish": null
+  },
   "scripts": {
     "start": "electron .",
-    "build": "rimraf build && node scripts/build"
+    "build": "rimraf build && electron-builder -mw"
   }
 }
