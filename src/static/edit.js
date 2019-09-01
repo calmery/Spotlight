@@ -60,6 +60,19 @@ function save() {
   alert("保存しました");
 }
 
+function saveToAnywhere() {
+  if (data === null) {
+    alert("検索データが存在しません");
+    return;
+  }
+
+  const download = document.createElement("a");
+  download.download = "result.json";
+  download.href = URL.createObjectURL(new Blob([JSON.stringify(data)], {type: "text/plain"}));
+  download.dataset.downloadurl = ["text/plain", download.download, download.href].join(":");
+  download.click();
+}
+
 function toggle(id) {
   const element = document.getElementById(`t-${id}`);
   const index = parseInt(element.getAttribute("data-index"), 10);
